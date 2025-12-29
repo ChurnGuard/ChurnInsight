@@ -1,8 +1,0 @@
-pandas>=2.0
-numpy>=1.24
-
-jupyterlab>=4.0
-ipykernel>=6.25
-
-pyyaml>=6.0
-
