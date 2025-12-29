@@ -205,3 +205,76 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# backend: java & spring boot
+# Binarios compilados y empaquetados
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Gradle (por si no se usa Maven)
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# NUNCA subir el estado de terraform (contiene secretos en texto plano)
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Archivos de variables con secretos
+*.tfvars
+*.tfvars.json
+terraform.rc
+.terraformrc
+
+# OCI CLI & SDK configs
+config
+oci_api_key*.pem
+private_key.pem
+
+# Credenciales generales
+credentials.json
+service-account.json
+auth.json
+
+# data
+*.xlsx
+*.xls
+*.parquet
+
+# Modelos
+*.pkl
+*.joblib
+*.onnx
+*.h5
+*.pt
+*.model
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+*.settings/
+bin/

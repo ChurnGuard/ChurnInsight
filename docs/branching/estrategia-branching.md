@@ -27,12 +27,13 @@ Todas las ramas deben crearse a partir de `main` y seguir estrictamente el forma
 
 | Prefijo | Uso Exclusivo | Ejemplo |
 | :--- | :--- | :--- |
-| `feat/` | Nuevas funcionalidades para Backend o Frontend. | `feat/login-endpoint`, `feat/dashboard-ui` |
-| `fix/` | Corrección de errores o bugs. | `fix/cors-policy`, `fix/null-pointer-id` |
-| `data/` | **Ciencia de Datos:** Notebooks, ETLs, modelos. | `data/exploratory-analysis`, `data/train-model-v1` |
-| `infra/` | **Infraestructura:** OCI, Docker, Terraform, CI/CD. | `infra/oci-bucket-setup`, `infra/docker-compose` |
-| `docs/` | Cambios exclusivos en documentación. | `docs/api-contract`, `docs/update-readme` |
-| `refactor/` | Mejoras de código que no alteran la funcionalidad. | `refactor/optimize-imports` |
+| `feat/` | Nuevas funcionalidades para Backend o Frontend. | `feat/endpoint-login`, `feat/ui-dashboard` |
+| `fix/` | Corrección de errores o bugs. | `fix/politica-cors`, `fix/puntero-nulo-id` |
+| `data/` | **Ciencia de Datos:** Notebooks, ETLs, modelos. | `data/analisis-exploratorio`, `data/entrenar-modelo-v1` |
+| `infra/` | **Infraestructura:** OCI, Docker, Terraform, CI/CD. | `infra/configuracion-bucket-oci`, `infra/docker-compose` |
+| `docs/` | Cambios exclusivos en documentación. | `docs/contrato-api`, `docs/actualizar-readme` |
+| `refactor/` | Mejoras de código que no alteran la funcionalidad. | `refactor/optimizar-importaciones` |
+| `chore/` | Tareas de mantenimiento y configuraciones que no afectan el codigo | `chore/actualizar-dependencias`, `chore/limpiar-scripts` |
 
 ---
 
@@ -43,17 +44,17 @@ Nuestros mensajes de commit deben ser semánticos para facilitar la lectura del 
 **Estructura:**
 `tipo(alcance): descripción breve`
 
-* **tipo:** Coincide con el prefijo de la rama (`feat`, `fix`, `data`, `infra`, `docs`, `refactor`).
-* **(alcance):** Opcional. Indica qué parte del sistema se tocó (`back`, `front`, `data`, `shared`).
+* **tipo:** Coincide con el prefijo de la rama (`feat`, `fix`, `data`, `infra`, `docs`, `refactor`, `chore`).
+* **(alcance):** Opcional. Indica qué parte del sistema se tocó (`back`, `front`, `data`, `shared`, `deps`, `infra`).
 * **descripción:** Imperativo, claro y conciso.
 
 ### Ejemplos Válidos
-* `feat(back): add customer churn controller`
-* `data(model): update random forest hyperparameters`
-* `infra(oci): add terraform script for object storage`
-* `fix(front): resolve mobile responsiveness on login`
-* `docs: update contributing guidelines`
-
+* `feat(back): agregar controlador de churn`
+* `data(modelo): actualizar hiperparametros de random forest`
+* `infra(oci): agregar script de terraform para object storage`
+* `fix(front): resolver responsividad movil en login`
+* `docs: actualizar guias de contribucion`
+* `chore(infra): actualizar gitignore para excluir archivos csv`
 ---
 
 ## 4. Flujo de Pull Requests (PR)
