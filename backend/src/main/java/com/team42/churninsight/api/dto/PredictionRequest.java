@@ -1,12 +1,13 @@
 package com.team42.churninsight.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team42.churninsight.domain.enums.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public record PredictionRequest(
+
         @JsonProperty("customer_id") String customerId,
         Integer age,
         Gender gender,
@@ -18,13 +19,14 @@ public record PredictionRequest(
         @JsonProperty("education_level") EducationLevel educationLevel,
         Occupation occupation,
         @JsonProperty("transaction_id") String transactionId,
-        @JsonProperty("transaction_date") @JsonFormat(pattern = "M/d/yyyy") String transactionDate,
+        //Formato "%Y-%m-%d" => ISO 8601
+        @JsonProperty("transaction_date") LocalDate transactionDate,
         @JsonProperty("product_category") ProductCategory productCategory,
         Integer quantity,
         @JsonProperty("unit_price") BigDecimal unitPrice,
         @JsonProperty("avg_purchase") BigDecimal avgPurchase,
-        @JsonProperty("purchase_frecuency") BigDecimal purchaseFrecuency,
-        @JsonProperty("last_purchase_date") @JsonFormat(pattern = "M/d/yyyy") String LastPurchaseDate,
+        @JsonProperty("purchase_frequency") BigDecimal purchaseFrequency,
+        @JsonProperty("last_purchase_date") LocalDate lastPurchaseDate,
         @JsonProperty("avg_discount_used") BigDecimal avgDiscountUsed,
         @JsonProperty("online_purchases") Integer onlinePurchases,
         @JsonProperty("in_store_purchases") Integer inStorePurchases,
