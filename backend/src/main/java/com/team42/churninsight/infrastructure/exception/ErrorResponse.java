@@ -1,4 +1,4 @@
-package com.team42.churninsight.exception;
+package com.team42.churninsight.infrastructure.exception;
 
 import java.time.LocalDateTime;
 

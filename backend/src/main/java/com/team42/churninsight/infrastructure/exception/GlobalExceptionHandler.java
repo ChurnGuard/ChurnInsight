@@ -1,6 +1,5 @@
-package com.team42.churninsight.exception;
+package com.team42.churninsight.infrastructure.exception;
 
-import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,13 +39,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse>handlePersistence(PersistenceException ex){
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Persisntence Exception",
+                "Persistence Exception",
                 ex.getMessage(),
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
-    
 
 }
