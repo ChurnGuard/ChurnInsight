@@ -33,7 +33,7 @@ Columna objetivo que identifica el estado de abandono del cliente (1 = churn, 0 
 
 ### Dimensión del conjunto de datos
 
-* Filas: 357.590
+* Filas: 357.558
 
 * Columnas: 26 (incluida la variable objetivo churn)
 
