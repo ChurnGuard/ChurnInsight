@@ -1,22 +1,31 @@
 package com.team42.churninsight.prediction;
 
-
 import com.team42.churninsight.prediction.enums.Churn;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "predictions")
 public class Prediction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "customer_id")
     private String customerId;
+    @Column(name = "transaction_id")
     private String transactionId;
+    @Column(name = "probability_churn")
     private Double probabilityChurn;
+    @Enumerated(EnumType.STRING)
     private Churn churn;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public void calculateChurnStatus() {
@@ -36,6 +45,4 @@ public class Prediction {
         newPrediction.setCreatedAt(LocalDateTime.now());
         return newPrediction;
     }
-
 }
-
