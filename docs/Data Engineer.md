@@ -118,7 +118,7 @@ Esto indica que no todas las transacciones estuvieron asociadas a promociones, y
 
 Estos valores faltantes no deben considerarse errores automáticamente, sino que requieren una decisión de negocio sobre su tratamiento: imputación, categorización explícita o exclusión según corresponda.
 
-![alt text](<../ChurnInsight/docs/images/data engineer/cantidad de ceros por variable.png>)
+![Cantidad de ceros por variable](<../ChurnInsight/docs/images/data engineer/cantidad de ceros por variable.png>)
 
 ### Valores negativos
 
@@ -190,9 +190,11 @@ Respecto a tipo de promoción (Promotion Type), aproximadamente 14,241 transacci
 
 Finalmente, la variable churn muestra que la mayoría de los clientes permanecen activos: 265,903 no abandonaron, mientras que 91,654 sí lo hicieron. La tasa de churn es relativamente baja, lo que sugiere estabilidad en la base de clientes y un buen desempeño en retención.
 
-![alt text](<../ChurnInsight/docs/images/data engineer/variables categoricas.png>)
+![Variables categoricas](<../ChurnInsight/docs/images/data engineer/variables categoricas.png>)
 
-![alt text](<../ChurnInsight/docs/images/data engineer/churn por loyalty program.png>)
+![Churn por loyalty program](<../ChurnInsight/docs/images/data engineer/churn por loyalty program.png>)
+
+<../ChurnInsight/docs/images/data engineer/churn por loyalty program.png>
 
 ---
 
