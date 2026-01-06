@@ -278,3 +278,11 @@ auth.json
 *.project
 *.settings/
 bin/
+
+# Mac
+.DS_Store
+backend/.DS_Store
+
+# macOS
+.DS_Store
+**/.DS_Store
