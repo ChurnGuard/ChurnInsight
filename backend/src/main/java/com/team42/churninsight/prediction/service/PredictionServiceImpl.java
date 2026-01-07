@@ -54,10 +54,10 @@ public class PredictionServiceImpl implements PredictionService {
         validateBusinessRules(request);
 
         // 1) Llamada al modelo
-        Long raw = churnModelClient.predictChurn(request);
+        BigDecimal probability = churnModelClient.predictChurn(request);
 
         // 2) Normalización a probabilidad [0..1]
-        BigDecimal probability = normalizeProbability(raw);
+        //BigDecimal probability = normalizeProbability(raw);
 
         // 3) Decisión (umbral por ahora fijo)
         boolean churn = probability.compareTo(DEFAULT_THRESHOLD) >= 0;
@@ -109,7 +109,7 @@ public class PredictionServiceImpl implements PredictionService {
      * Si más adelante FastAPI devuelve BigDecimal directamente, este metodo puede simplificarse.
      */
 
-
+/*
     private BigDecimal normalizeProbability(Long raw) {
         if (raw == null) {
             throw new InvalidPredictionRequestException("El modelo devolvió una probabilidad nula");
@@ -128,5 +128,5 @@ public class PredictionServiceImpl implements PredictionService {
 
         // Si el modelo devuelve otra escala (ej. 0..1000), aquí no adivinamos.
         throw new InvalidPredictionRequestException("Probabilidad fuera de rango: " + raw);
-    }
+    }*/
 }
