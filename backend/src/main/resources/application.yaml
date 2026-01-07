@@ -3,7 +3,7 @@ spring:
     name: churninsight
 
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:file:./data/churninsight;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -15,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop  # Recrea tablas cada vez que inicias
+      ddl-auto: update  # Mantiene el esquema y aplica cambios sin borrar datos
     show-sql: true  # Muestra las queries SQL en consola
     properties:
       hibernate:
