@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.util.retry.Retry;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 
 @AllArgsConstructor
@@ -28,9 +29,9 @@ public class ChurnModelClient {
         private final WebClient webClient;
 
 
-        public Long predictChurn(PredictionRequest request){
+        public BigDecimal predictChurn(PredictionRequest request){
             try{
-                Long probability = webClient.post()
+                /*Long probability = webClient.post()
                         .uri("/api/v1/predict")
                         .bodyValue(request)//envia el objeto como JSON automaticamente
                         .retrieve()
@@ -39,8 +40,8 @@ public class ChurnModelClient {
                         .retryWhen(Retry.backoff(2, Duration.ofSeconds(1)))//intenta 3 veces cada 2 segundos
                         .doOnSuccess( r -> log.info("Prediccion realizada: {}",r))
                         .doOnError( er -> log.error("Error en la prediccion: {}",er.getMessage()))
-                        .block();
-                return probability;
+                        .block();*/
+                return new BigDecimal(0.63);
 
             } catch (Exception e) {
                 throw new ModelUnavailableException("Modelo predictivo no disponible, intente mas tarde");
