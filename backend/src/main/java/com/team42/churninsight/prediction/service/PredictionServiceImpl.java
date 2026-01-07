@@ -7,9 +7,11 @@
  *   (más allá de Bean Validation en el DTO).
  * - Delegar la inferencia al modelo externo (FastAPI) mediante ChurnModelClient.
  * - Normalizar la salida del modelo al contrato de la API (probability_churn en [0..1]).
+ *   ESTA PARTE DEBERA BORRARSE AHORA LO DECIDIRÁ LA ENTIDAD
  * - Derivar el label (churn = true/false) usando un umbral (threshold) configurable.
  *
- * Alcance actual:
+ *   Alcance actual: (ESTA PARTE DEBERA BORRARSE FINALIZADA LA PERSISTENCIA)
+ *    --- Hay persistencia vía JPA (H2 en dev) ---
  * - No hay persistencia (H2 pendiente). Se devuelve una respuesta construida en memoria.
  *
  * Notas de diseño:
@@ -18,12 +20,34 @@
  * - Este Service no conoce HTTP (ResponseEntity, status codes), solo dominio.
  */
 
+/**  2026-01-07
+ * CAMBIOS RECIENTES (Persistencia JPA / H2)
+ *
+ * - El Service actúa como orquestador del caso de uso: valida, invoca el modelo,
+ *   construye la entidad Prediction, persiste el resultado y devuelve la respuesta.
+ *
+ * - La decisión del estado de churn se delega exclusivamente a la entidad Prediction
+ *   (single source of truth), evitando duplicar lógica en el Service.
+ *
+ * - El resultado de la predicción se persiste antes de responder al cliente,
+ *   garantizando coherencia entre lo almacenado y lo expuesto por la API.
+ *
+ * - Prediction representa el modelo de dominio/persistencia, mientras que
+ *   PredictionResponse es un DTO propio de la capa API.
+ */
+
 package com.team42.churninsight.prediction.service;
 
 import com.team42.churninsight.common.exception.InvalidPredictionRequestException;
+import com.team42.churninsight.prediction.Prediction;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
 import com.team42.churninsight.prediction.api.dto.PredictionResponse;
 import com.team42.churninsight.prediction.client.ChurnModelClient;
+
+import com.team42.churninsight.prediction.enums.Churn;
+import com.team42.churninsight.prediction.repository.PredictionRepository;
+
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +58,8 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class PredictionServiceImpl implements PredictionService {
 
-    private static final BigDecimal DEFAULT_THRESHOLD = new BigDecimal("0.50");
-
     private final ChurnModelClient churnModelClient;
+    private final PredictionRepository predictionRepository;
 
 
     /**
@@ -44,8 +67,9 @@ public class PredictionServiceImpl implements PredictionService {
      * Flujo:
      * 1) Valida reglas de negocio (coherencias entre campos).
      * 2) Llama al modelo vía ChurnModelClient.
-     * 3) Convierte la salida del modelo a probabilidad [0..1].
-     * 4) Decide churn con threshold.
+     * 3) Convierte la salida del modelo a probabilidad [0..1]. (actualizado:tu client
+     *    ya devuelve BigDecimal en [0..1] por ahora)
+     * 4) Decide churn con threshold. (ya no; lo decide la entidad)
      * 5) Construye PredictionResponse.
      */
 
@@ -56,17 +80,31 @@ public class PredictionServiceImpl implements PredictionService {
         // 1) Llamada al modelo
         BigDecimal probability = churnModelClient.predictChurn(request);
 
+        Prediction entity = Prediction.create(
+                request.customerId(),
+                request.transactionId(),
+                probability.doubleValue()
+        );
+
+        Prediction saved = predictionRepository.save(entity);
+        //predictionRepository.save(entity);
+
+        boolean churn = saved.getChurn() == Churn.CHURN;
+        //boolean churn = entity.getChurn() == Churn.CHURN;
+
         // 2) Normalización a probabilidad [0..1]
         //BigDecimal probability = normalizeProbability(raw);
 
+/*      Ya no es necesario si entidad Prediction es la fuente de verdad y vamos a persistir entity
         // 3) Decisión (umbral por ahora fijo)
         boolean churn = probability.compareTo(DEFAULT_THRESHOLD) >= 0;
-
-        // 4) Respuesta (sin persistencia por ahora)
+*/
+        // 4) Respuesta (necesario para persistencia)
         return new PredictionResponse(
-                request.customerId(),
+                saved.getCustomerId(),    // en vez de request.customerId()
+                //entity.getCustomerId(),
                 churn,
-                probability
+                probability               // o BigDecimal.valueOf(entity.getProbabilityChurn())
         );
     }
 

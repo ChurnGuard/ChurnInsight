@@ -278,3 +278,8 @@ auth.json
 *.project
 *.settings/
 bin/
+
+# H2 database files
+/data/
+/*.mv.db
+/*.trace.db
