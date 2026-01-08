@@ -1,5 +1,6 @@
 package com.team42.churninsight.prediction.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team42.churninsight.prediction.enums.*;
 import jakarta.validation.constraints.*;
@@ -71,11 +72,13 @@ public record PredictionRequest(
         @NotNull
         @PastOrPresent
         @JsonProperty("transaction_date")
+        @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate transactionDate,
 
         @NotNull
         @PastOrPresent
         @JsonProperty("last_purchase_date")
+        @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate lastPurchaseDate,
 
         //Producto / transacción
@@ -97,8 +100,8 @@ public record PredictionRequest(
         Integer membershipYears,
 
         @DecimalMin(value = "0.0")
-        @JsonProperty("avg_purchase")
-        BigDecimal avgPurchase,
+        @JsonProperty("avg_purchase_value")
+        BigDecimal avgPurchaseValue,
 
         @DecimalMin(value = "0.0")
         @JsonProperty("purchase_frequency")
