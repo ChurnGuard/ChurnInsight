@@ -10,8 +10,12 @@ class PredictionRequest(BaseModel):
     recency: int = Field(..., description="Dias desde la ultima compra")
     frequency: int = Field(..., description="Frecuencia de compra")
     monetary: float = Field(..., description="Gasto total")
-    total_transactions: int
-    avg_transaction_value: float
+    total_transactions: int = Field(
+        ..., description="Total de transacciones históricas"
+    )
+    avg_transaction_value: float = Field(
+        ..., description="Valor promedio por transacción"
+    )
 
     # Variables calculadas
     discount_usage_rate: float = Field(
@@ -33,10 +37,3 @@ class PredictionRequest(BaseModel):
                 "return_rate": 0.02,
             }
         }
-
-
-class PredictionResponse(BaseModel):
-    customer_id: str
-    prediction: int = Field(..., description="1 = Churn (Se va), 0 = No Churn")
-    probability: float = Field(..., description="Confianza del modelo (0.0 a 1.0)")
-    status: str

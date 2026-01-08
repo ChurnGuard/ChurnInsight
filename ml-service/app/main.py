@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.schemas.prediction import PredictionRequest, PredictionResponse
+from app.schemas.prediction import PredictionRequest
 import random
 
 app = FastAPI(title="ChurnInsight ML Service", version="1.0")
@@ -10,8 +10,8 @@ def health_check():
     return {"status": "ok", "service": "ml-service-v1"}
 
 
-@app.post("/predict/{customer_id}", response_model=PredictionResponse)
-def predict_churn(customer_id: str, data: PredictionRequest):
+@app.post("/predict", response_model=float)
+def predict_churn(data: PredictionRequest):
     """
     Endpoint temporal para simular la prediccion del modelo.
     """
@@ -36,11 +36,4 @@ def predict_churn(customer_id: str, data: PredictionRequest):
     noise = random.uniform(-0.1, 0.1)
     final_prob = min(max(risk_score + noise, 0.0), 1.0)
 
-    is_churn = 1 if final_prob > 0.5 else 0
-
-    return {
-        "customer_id": customer_id,
-        "prediction": is_churn,
-        "probability": round(final_prob, 4),
-        "status": "success",
-    }
+    return round(final_prob, 4)
