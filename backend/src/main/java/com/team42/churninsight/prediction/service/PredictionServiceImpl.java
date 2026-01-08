@@ -60,6 +60,7 @@ public class PredictionServiceImpl implements PredictionService {
 
     private final ChurnModelClient churnModelClient;
     private final PredictionRepository predictionRepository;
+    private static final int SCALE = 4;
 
 
     /**
@@ -78,7 +79,8 @@ public class PredictionServiceImpl implements PredictionService {
         validateBusinessRules(request);
 
         // 1) Llamada al modelo
-        BigDecimal probability = churnModelClient.predictChurn(request);
+        BigDecimal rawpProbability = churnModelClient.predictChurn(request);
+        BigDecimal probability = normalizeProbability(rawpProbability);
 
         Prediction entity = Prediction.create(
                 request.customerId(),
@@ -91,9 +93,6 @@ public class PredictionServiceImpl implements PredictionService {
 
         boolean churn = saved.getChurn() == Churn.CHURN;
         //boolean churn = entity.getChurn() == Churn.CHURN;
-
-        // 2) Normalización a probabilidad [0..1]
-        //BigDecimal probability = normalizeProbability(raw);
 
 /*      Ya no es necesario si entidad Prediction es la fuente de verdad y vamos a persistir entity
         // 3) Decisión (umbral por ahora fijo)
@@ -138,33 +137,25 @@ public class PredictionServiceImpl implements PredictionService {
     }
 
 
-
     /**
-     * Normaliza el valor devuelto por el modelo a rango [0..1] como BigDecimal.
-     * Esto existe porque actualmente el cliente devuelve Long y el contrato de API
-     * exige probability_churn en [0..1].
-     *
-     * Si más adelante FastAPI devuelve BigDecimal directamente, este metodo puede simplificarse.
+     * Valida y normaliza la probabilidad de churn devuelta por el modelo.
+     * Reglas:
+     * - La probabilidad no puede ser null.
+     * - Debe estar en el rango [0..1].
+     * - Se normaliza la escala para mantener consistencia numérica.
+     * Si el modelo devuelve un valor fuera de rango o inválido,
+     * se lanza una excepción para proteger la integridad del dominio.
      */
 
-/*
-    private BigDecimal normalizeProbability(Long raw) {
+    private BigDecimal normalizeProbability(BigDecimal raw) {
         if (raw == null) {
             throw new InvalidPredictionRequestException("El modelo devolvió una probabilidad nula");
         }
-
-        // 0 ó 1: válido como caso mínimo
-        if (raw == 0L || raw == 1L) {
-            return BigDecimal.valueOf(raw).setScale(4, RoundingMode.HALF_UP);
+        if (raw.compareTo(BigDecimal.ZERO) < 0 || raw.compareTo(BigDecimal.ONE) > 0) {
+            throw new InvalidPredictionRequestException("Probabilidad fuera de rango [0,1]: " + raw);
         }
+        return raw.setScale(SCALE, RoundingMode.HALF_UP);
+    }
 
-        // 0..100: porcentaje entero
-        if (raw >= 0L && raw <= 100L) {
-            return BigDecimal.valueOf(raw)
-                    .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
-        }
 
-        // Si el modelo devuelve otra escala (ej. 0..1000), aquí no adivinamos.
-        throw new InvalidPredictionRequestException("Probabilidad fuera de rango: " + raw);
-    }*/
 }
