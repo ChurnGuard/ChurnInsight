@@ -1,20 +1,15 @@
 package com.team42.churninsight.prediction.client;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.team42.churninsight.common.exception.ModelUnavailableException;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
-import io.swagger.v3.core.util.Json;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.util.retry.Retry;
-
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @AllArgsConstructor
 @Slf4j
