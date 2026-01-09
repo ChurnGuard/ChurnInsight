@@ -1,6 +1,9 @@
 package com.team42.churninsight.prediction.client;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.team42.churninsight.common.exception.ModelUnavailableException;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
+import io.swagger.v3.core.util.Json;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,6 +12,9 @@ import reactor.util.retry.Retry;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Slf4j
@@ -29,19 +35,25 @@ public class ChurnModelClient {
         private final WebClient webClient;
 
 
+
         public BigDecimal predictChurn(PredictionRequest request){
             try{
-                /*Long probability = webClient.post()
-                        .uri("/api/v1/predict")
-                        .bodyValue(request)//envia el objeto como JSON automaticamente
+                //Fast api recibe un Json (clave, valor) como body de request
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("age", request.age());
+
+                var probability = webClient.post()
+                        .uri("/predict")
+                        .bodyValue(requestBody)//envia el objeto como JSON automaticamente
                         .retrieve()
-                        .bodyToMono(Long.class)
+                        .bodyToMono(Double.class)
                         .timeout(Duration.ofSeconds(30))
                         .retryWhen(Retry.backoff(2, Duration.ofSeconds(1)))//intenta 3 veces cada 2 segundos
                         .doOnSuccess( r -> log.info("Prediccion realizada: {}",r))
                         .doOnError( er -> log.error("Error en la prediccion: {}",er.getMessage()))
-                        .block();*/
-                return new BigDecimal(0.63);
+                        .block();
+                System.out.println("Respuesta de fast api: "+probability);
+                return BigDecimal.valueOf(probability);
 
             } catch (Exception e) {
                 throw new ModelUnavailableException("Modelo predictivo no disponible, intente mas tarde");
