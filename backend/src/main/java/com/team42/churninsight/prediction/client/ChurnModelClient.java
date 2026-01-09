@@ -38,6 +38,7 @@ public class ChurnModelClient {
 
         public BigDecimal predictChurn(PredictionRequest request){
             try{
+                //Fast api recibe un Json (clave, valor) como body de request
                 Map<String, Object> requestBody = new HashMap<>();
                 requestBody.put("age", request.age());
 
