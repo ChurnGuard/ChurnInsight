@@ -225,7 +225,7 @@ Recibe los datos de un cliente y devuelve la predicción de churn (cancelación 
 
 ### Documentación Técnica
 
-- **Data Engineering**: Ver [`docs/Data Engineer.md`](docs/Data%20Engineer.md) para detalles del pipeline ETL, validación de datos y reglas de negocio
+- **Data Engineering**: Ver [`docs/Data-Engineer/documentacion.md`](docs/Data%20Engineer.md) para detalles del pipeline ETL, validación de datos y reglas de negocio
 - **Arquitectura OCI**: Diagramas de infraestructura en [`docs/OCI/`](docs/OCI/)
 - **Estrategia de Branching**: Ver [`docs/branching/estrategia-branching.md`](docs/branching/estrategia-branching.md)
 

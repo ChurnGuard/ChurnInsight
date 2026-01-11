@@ -113,7 +113,7 @@ Las columnas con mayor cantidad de nulos son:
 * purchase_frequency: 19,941 registros
 * total_sales: 34,785 registros
 
-<img width="1189" height="590" alt="cantidad de ceros por variable" src="https://github.com/user-attachments/assets/5f3fb855-f108-44e1-9fd7-97a8090e21df" />
+<img width="1189" height="590" alt="cantidad de ceros por variable" src="images/cantidad-de-ceros-por-variable.png"/>
 
 Esto indica que no todas las transacciones estuvieron asociadas a promociones, y que algunas métricas agregadas no se calcularon para todos los clientes. En el caso de total_sales, los nulos podrían reflejar inconsistencias o la ausencia de historial consolidado de ciertos clientes.
 
@@ -189,9 +189,9 @@ Respecto a tipo de promoción (Promotion Type), aproximadamente 14,241 transacci
 
 Finalmente, la variable churn muestra que la mayoría de los clientes permanecen activos: 265,903 no abandonaron, mientras que 91,654 sí lo hicieron. La tasa de churn es relativamente baja, lo que sugiere estabilidad en la base de clientes y un buen desempeño en retención.
 
-<img width="1489" height="1189" alt="variables categoricas" src="https://github.com/user-attachments/assets/e0dc3662-6f58-4ab5-bc84-7e9395faca8b" />
+<img width="1489" height="1189" alt="variables categoricas" src="images/variables-categoricas.png"/>
 
-<img width="790" height="490" alt="churn por loyalty program" src="https://github.com/user-attachments/assets/a948cdc4-ef97-4e42-a0b4-84302992d7cc" />
+<img width="790" height="490" alt="churn por loyalty program" src="images/churn-por-loyalty-program.png"/>
 
 ---
 
