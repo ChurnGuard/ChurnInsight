@@ -248,7 +248,7 @@ terraform.rc
 .terraformrc
 
 # OCI CLI & SDK configs
-config
+oci_config
 oci_api_key*.pem
 private_key.pem
 
