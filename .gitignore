@@ -264,7 +264,6 @@ auth.json
 
 # Modelos
 *.pkl
-*.joblib
 *.onnx
 *.h5
 *.pt
