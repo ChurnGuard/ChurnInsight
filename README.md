@@ -35,9 +35,13 @@ data-science/
 │   ├── interim/                # Datos en proceso de transformación
 │   ├── processed/              # Datos procesados y validados
 │   └── final/                  # Datasets listos para ML y análisis
+├── models/
+│   ├── metrics_summary.csv     # Resumen del performance de los modelos ML.
+│   ├── rf_v1_baseline.joblib   # Serializacion del modelo ganador.
 ├── notebooks/
 │   ├── Data engineer.ipynb     # ETL, limpieza y validación de datos
 │   └── Data_Analyst.ipynb      # EDA y análisis exploratorio
+│   └── Data_Scientist.ipynb    # Creacion, entrenamiento y serializacion de modelos ML
 ├── scripts/
 │   ├── generar-datos-sinteticos.py  # Generación de datos sintéticos
 │   └── validar-datasets.py          # Validación de calidad de datos
