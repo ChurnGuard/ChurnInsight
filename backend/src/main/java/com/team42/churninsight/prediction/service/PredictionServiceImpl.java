@@ -47,6 +47,9 @@ import com.team42.churninsight.prediction.client.ChurnModelClient;
 import com.team42.churninsight.prediction.enums.Churn;
 import com.team42.churninsight.prediction.repository.PredictionRepository;
 
+import com.team42.churninsight.prediction.enums.ValueCustomer;
+import com.team42.churninsight.prediction.service.EconomicService;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,6 +64,8 @@ public class PredictionServiceImpl implements PredictionService {
     private final ChurnModelClient churnModelClient;
     private final PredictionRepository predictionRepository;
     private static final int SCALE = 4;
+
+    private final EconomicService economicService;
 
 
     /**
@@ -93,6 +98,19 @@ public class PredictionServiceImpl implements PredictionService {
 
         boolean churn = saved.getChurn() == Churn.CHURN;
         //boolean churn = entity.getChurn() == Churn.CHURN;
+//Nuevo
+  // Calculo el EconomicValueScore y categoriza
+        BigDecimal economicScore = economicService.economicValueScore(
+                request.totalSales(),
+                request.avgPurchaseValue(),
+                request.totalTransactions()
+        );
+
+        ValueCustomer valueCustomer = economicService.categorize(economicScore);
+        //Calcula priorityScore
+        BigDecimal priorityScore = economicService.priorityScore(probability, economicScore);
+
+
 
 /*      Ya no es necesario si entidad Prediction es la fuente de verdad y vamos a persistir entity
         // 3) Decisión (umbral por ahora fijo)
@@ -103,7 +121,10 @@ public class PredictionServiceImpl implements PredictionService {
                 saved.getCustomerId(),    // en vez de request.customerId()
                 //entity.getCustomerId(),
                 churn,
-                probability               // o BigDecimal.valueOf(entity.getProbabilityChurn())
+                probability,               // o BigDecimal.valueOf(entity.getProbabilityChurn())
+                economicScore,
+                valueCustomer,
+                priorityScore
         );
     }
 
