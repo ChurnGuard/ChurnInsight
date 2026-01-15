@@ -31,8 +31,8 @@ public class ProfileService {
         double onlinePercentage = CalculateOnlinePercentage(request);
 
         //Revisar valor a comparar para discountUsage
-        if( discountUsage.compareTo(BigDecimal.valueOf(0.10) ) > 0
-                && onlinePercentage < 60.0) {
+        if( discountUsage.compareTo(BigDecimal.valueOf(5) ) > 0
+                && onlinePercentage < 60 ) {
 
             return ProfileType.IN_STORE_DEAL_HUNTER;
         }
