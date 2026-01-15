@@ -20,18 +20,8 @@ public record PredictionResponse(
         @DecimalMin(value = "0.0")
         @DecimalMax(value = "1.0")
         @JsonProperty("probability_churn")
-        BigDecimal probabilityChurn,
+        BigDecimal probabilityChurn
 
-        // --- NUEVO ---
-        @NotNull
-        @JsonProperty("economic_value_score")
-                BigDecimal economicValueScore,
+        // --- NUEVO --- aqui debe ir la parte de "economic_value_score", "value_score", "priority_score"
 
-        @NotNull
-        @JsonProperty("value_customer")
-        ValueCustomer valueCustomer,
-
-        @NotNull
-        @JsonProperty("priority_score")
-        BigDecimal priorityScore
 ) {}
