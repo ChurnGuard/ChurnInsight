@@ -108,7 +108,7 @@ public record PredictionRequest(
         BigDecimal purchaseFrequency,
 
         @DecimalMin(value = "0.0")
-        @DecimalMax(value = "1.0")
+        // @DecimalMax(value = "1.0")
         @JsonProperty("avg_discount_used")
         BigDecimal avgDiscountUsed,
 
