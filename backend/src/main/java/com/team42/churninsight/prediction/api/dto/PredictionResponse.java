@@ -1,6 +1,7 @@
 package com.team42.churninsight.prediction.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.team42.churninsight.prediction.enums.ValueCustomer;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -20,4 +21,7 @@ public record PredictionResponse(
         @DecimalMax(value = "1.0")
         @JsonProperty("probability_churn")
         BigDecimal probabilityChurn
+
+        // --- NUEVO --- aqui debe ir la parte de "economic_value_score", "value_score", "priority_score"
+
 ) {}
