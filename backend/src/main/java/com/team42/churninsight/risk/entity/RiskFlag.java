@@ -21,5 +21,8 @@ public class RiskFlag {
     private FlagType flagType;
 
 
-
+    public RiskFlag(Long predictionId, FlagType flagType) {
+        this.predictionId = predictionId;
+        this.flagType = flagType;
+    }
 }
