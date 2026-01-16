@@ -1,0 +1,42 @@
+package com.team42.churninsight.decision.decisionEngine.customerCases;
+
+import com.team42.churninsight.decision.decisionEngine.DecisionRequest;
+import com.team42.churninsight.decision.decisionEngine.DecisionRule;
+import com.team42.churninsight.prediction.enums.ValueCustomer;
+
+import java.util.List;
+
+public class LowRiskHighValue {
+
+    public static class NoFLag implements DecisionRule {
+
+        @Override
+        public boolean applies(DecisionRequest r) {
+            return r.probabilityChurn() < 0.3
+                    && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
+                    && r.flagType() == null;
+        }
+
+        @Override
+        public List<String> getActions() {
+            return List.of("Programa VIP automático + acceso anticipado + eventos exclusivos");
+        }
+    }
+
+    public static class AnyFlag implements DecisionRule {
+
+        @Override
+        public boolean applies(DecisionRequest r) {
+            return r.probabilityChurn() >= 0.3
+                    && r.probabilityChurn() <= 0.5
+                    && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
+                    && r.flagType() != null;
+        }
+
+        @Override
+        public List<String> getActions() {
+            return List.of("Check-in proactivo + beneficio sorpresa + solicitud de feedback");
+        }
+    }
+
+}
