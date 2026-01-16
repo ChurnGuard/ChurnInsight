@@ -1,0 +1,14 @@
+services:
+  ml-service:
+    build: ./ml-service
+    ports:
+      - "8000:8000"
+    
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - ML_SERVICE_URL=${ML_SERVICE_URL}
+    depends_on:
+      - ml-service

@@ -1,0 +1,36 @@
+# Artefactos
+target/
+
+# Maven wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# Base de datos local H2
+data/
+
+# Documentacion
+HELP.md
+README.md
+*.md
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+
+# OS
+.DS_Store
+Thumbs.db
