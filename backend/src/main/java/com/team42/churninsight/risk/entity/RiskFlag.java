@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,10 +21,13 @@ public class RiskFlag {
     private Long predictionId;
     @Column(name = "flag_type")
     private FlagType flagType;
+    @Column(name = "detected_at")
+    private LocalDateTime detectedAt;
 
 
     public RiskFlag(Long predictionId, FlagType flagType) {
         this.predictionId = predictionId;
         this.flagType = flagType;
+        this.detectedAt = LocalDateTime.now();
     }
 }
