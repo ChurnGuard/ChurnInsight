@@ -115,10 +115,7 @@ public class PredictionServiceImpl implements PredictionService {
         System.out.println("RiskFlags: "+flags.toString());
 
         // 5) Identificar accion recomendada
-        //String recomendation = recommendedActionService.getRecommendation();
-
-
-
+        String recomendation = recommendedActionService.getRecommendation(probability.doubleValue(), valueCustomer,flags,profileType);
 
 
         Prediction entity = Prediction.create(
@@ -130,7 +127,7 @@ public class PredictionServiceImpl implements PredictionService {
         Prediction saved = predictionRepository.save(entity);
         //predictionRepository.save(entity);
 
-        boolean churn = saved.getChurn() == Churn.CHURN;
+        boolean churn = entity.getChurn() == Churn.CHURN;
         //boolean churn = entity.getChurn() == Churn.CHURN;
 
         // 4) Respuesta (necesario para persistencia)
@@ -139,14 +136,18 @@ public class PredictionServiceImpl implements PredictionService {
 
         return new PredictionResponse(
                 saved.getCustomerId(),    // en vez de request.customerId()
-                //entity.getCustomerId(),
+
                 probability,               // o BigDecimal.valueOf(entity.getProbabilityChurn())
                 churn,
-                ValueCustomer.MEDIUM_VALUE_CUSTOMER,
-                new BigDecimal("0.1"),
+
+                valueCustomer,
+                priorityScore,
+
                 flags,
-                ProfileType.ESSENTIAL_MODERATE_BUYER,
-                "Accion recomendada por defecto"
+
+                profileType,
+
+                recomendation
         );
     }
 
