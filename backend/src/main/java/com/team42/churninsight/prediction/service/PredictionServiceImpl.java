@@ -45,14 +45,19 @@ import com.team42.churninsight.prediction.api.dto.PredictionResponse;
 import com.team42.churninsight.prediction.client.ChurnModelClient;
 
 import com.team42.churninsight.prediction.enums.Churn;
+import com.team42.churninsight.prediction.enums.ValueCustomer;
 import com.team42.churninsight.prediction.repository.PredictionRepository;
 
 
+import com.team42.churninsight.profiling.enums.ProfileType;
+import com.team42.churninsight.risk.enums.FlagType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+
 
 @Service
 @RequiredArgsConstructor
@@ -99,11 +104,19 @@ public class PredictionServiceImpl implements PredictionService {
         boolean churn = probability.compareTo(DEFAULT_THRESHOLD) >= 0;
 */
         // 4) Respuesta (necesario para persistencia)
+        var flags = new ArrayList<FlagType>();
+
+
         return new PredictionResponse(
                 saved.getCustomerId(),    // en vez de request.customerId()
                 //entity.getCustomerId(),
+                probability,               // o BigDecimal.valueOf(entity.getProbabilityChurn())
                 churn,
-                probability               // o BigDecimal.valueOf(entity.getProbabilityChurn())
+                ValueCustomer.MEDIUM_VALUE_CUSTOMER,
+                new BigDecimal("0.1"),
+                flags,
+                ProfileType.ESSENTIAL_MODERATE_BUYER,
+                "Accion recomendada por defecto"
         );
     }
 
