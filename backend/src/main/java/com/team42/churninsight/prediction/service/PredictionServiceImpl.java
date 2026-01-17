@@ -39,6 +39,7 @@
 package com.team42.churninsight.prediction.service;
 
 import com.team42.churninsight.common.exception.InvalidPredictionRequestException;
+import com.team42.churninsight.decision.service.RecommendedActionService;
 import com.team42.churninsight.economic.EconomicService;
 import com.team42.churninsight.prediction.Prediction;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
@@ -74,6 +75,7 @@ public class PredictionServiceImpl implements PredictionService {
     private final EconomicService economicService;
     private final ProfileService profileService;
     private final RiskFlagService riskFlagService;
+    private final RecommendedActionService recommendedActionService;
     private static final int SCALE = 4;
 
 
@@ -112,6 +114,8 @@ public class PredictionServiceImpl implements PredictionService {
         Set<FlagType> flags = riskFlagService.evaluateFlags(request);
         System.out.println("RiskFlags: "+flags.toString());
 
+        // 5) Identificar accion recomendada
+        String recomendation = recommendedActionService.getRecommendation();
 
 
 
