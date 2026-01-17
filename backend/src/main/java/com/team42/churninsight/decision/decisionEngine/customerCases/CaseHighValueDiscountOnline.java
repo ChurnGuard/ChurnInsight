@@ -12,7 +12,7 @@ public class CaseHighValueDiscountOnline {
         @Override
         public boolean applies(DecisionRequest r) {
             return r.profileType() == ProfileType.HIGH_VALUE_DISCOUNT_ONLINE
-                    && r.getFlagTypesList() .contains(FlagType.PROMO_ABUSE);
+                    && r.getFlagTypesList().contains(FlagType.PROMO_ABUSE);
         }
 
         @Override
