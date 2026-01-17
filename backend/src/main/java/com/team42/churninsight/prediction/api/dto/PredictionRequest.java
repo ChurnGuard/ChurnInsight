@@ -72,7 +72,7 @@ public record PredictionRequest(
         @NotNull
         @PastOrPresent
         @JsonProperty("transaction_date")
-        @JsonFormat(pattern = "dd/MM/yyyy")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate transactionDate,
 
         @NotNull
