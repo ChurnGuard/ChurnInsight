@@ -6,17 +6,16 @@ import com.team42.churninsight.risk.entity.RiskFlag;
 import com.team42.churninsight.risk.enums.FlagType;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public record DecisionRequest(
         Double probabilityChurn,
         ValueCustomer valueCustomer,
-        List<RiskFlag> riskFlagList,
+        Set<RiskFlag> riskFlagList,
         ProfileType profileType
 ) {
-   public Set<FlagType> getFlagTypesList() {
+   public Set<FlagType> getFlagTypesSet() {
        return riskFlagList.stream()
                .map(RiskFlag::getFlagType)
                .collect(Collectors.toCollection(()
