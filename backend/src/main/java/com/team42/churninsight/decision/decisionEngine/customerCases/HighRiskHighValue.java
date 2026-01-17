@@ -13,7 +13,7 @@ public class HighRiskHighValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.7
                     && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
-                    && r.getFlagTypesSet().contains(FlagType.INACTIVITY_RISK);
+                    && r.riskFlagList().contains(FlagType.INACTIVITY_RISK);
         }
 
         @Override
@@ -28,7 +28,7 @@ public class HighRiskHighValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.6
                     && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
-                    && r.getFlagTypesSet().contains(FlagType.FINANCIAL_RISK);
+                    && r.riskFlagList().contains(FlagType.FINANCIAL_RISK);
         }
 
         @Override
@@ -43,7 +43,7 @@ public class HighRiskHighValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.6
                     && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
-                    && r.getFlagTypesSet().contains(FlagType.PROMO_ABUSE);
+                    && r.riskFlagList().contains(FlagType.PROMO_ABUSE);
         }
 
         @Override

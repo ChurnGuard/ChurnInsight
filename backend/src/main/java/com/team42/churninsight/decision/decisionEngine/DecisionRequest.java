@@ -12,13 +12,6 @@ import java.util.stream.Collectors;
 public record DecisionRequest(
         Double probabilityChurn,
         ValueCustomer valueCustomer,
-        Set<RiskFlag> riskFlagList,
+        Set<FlagType> riskFlagList,
         ProfileType profileType
-) {
-   public Set<FlagType> getFlagTypesSet() {
-       return riskFlagList.stream()
-               .map(RiskFlag::getFlagType)
-               .collect(Collectors.toCollection(()
-                       -> EnumSet.noneOf(FlagType.class)));
-   }
-}
+) {}

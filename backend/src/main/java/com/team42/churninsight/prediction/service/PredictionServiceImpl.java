@@ -115,7 +115,7 @@ public class PredictionServiceImpl implements PredictionService {
         System.out.println("RiskFlags: "+flags.toString());
 
         // 5) Identificar accion recomendada
-        String recomendation = recommendedActionService.getRecommendation();
+        //String recomendation = recommendedActionService.getRecommendation();
 
 
 
