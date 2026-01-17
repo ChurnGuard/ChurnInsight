@@ -110,6 +110,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         // 4) Calcular las RiskFlags
         Set<FlagType> flags = riskFlagService.evaluateFlags(request);
+        System.out.println("RiskFlags: "+flags.toString());
 
 
 

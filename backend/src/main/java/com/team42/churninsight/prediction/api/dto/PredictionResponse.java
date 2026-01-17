@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 public record PredictionResponse(
         @NotNull
@@ -37,7 +38,7 @@ public record PredictionResponse(
 
         @NotNull
         @JsonProperty("risk_flags")
-        List<FlagType> riskFlags,
+        Set<FlagType> riskFlags,
 
         @NotNull
         @JsonProperty("customer_profile")
