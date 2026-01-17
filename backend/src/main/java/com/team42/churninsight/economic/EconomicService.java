@@ -1,6 +1,5 @@
-package com.team42.churninsight.prediction.service;
+package com.team42.churninsight.economic;
 
-import com.team42.churninsight.prediction.enums.ValueCustomer;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

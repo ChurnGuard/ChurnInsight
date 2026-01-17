@@ -1,4 +1,4 @@
-package com.team42.churninsight.prediction.enums;
+package com.team42.churninsight.economic;
 
 public enum ValueCustomer {
     HIGH_VALUE_CUSTOMER,

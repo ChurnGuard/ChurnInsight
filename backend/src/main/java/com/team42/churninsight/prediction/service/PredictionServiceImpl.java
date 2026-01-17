@@ -45,7 +45,7 @@ import com.team42.churninsight.prediction.api.dto.PredictionResponse;
 import com.team42.churninsight.prediction.client.ChurnModelClient;
 
 import com.team42.churninsight.prediction.enums.Churn;
-import com.team42.churninsight.prediction.enums.ValueCustomer;
+import com.team42.churninsight.economic.ValueCustomer;
 import com.team42.churninsight.prediction.repository.PredictionRepository;
 
 

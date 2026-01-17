@@ -2,7 +2,7 @@ package com.team42.churninsight.decision.decisionEngine.customerCases;
 
 import com.team42.churninsight.decision.decisionEngine.DecisionRequest;
 import com.team42.churninsight.decision.decisionEngine.DecisionRule;
-import com.team42.churninsight.prediction.enums.ValueCustomer;
+import com.team42.churninsight.economic.ValueCustomer;
 import com.team42.churninsight.risk.enums.FlagType;
 
 public class HighRiskLowValue {

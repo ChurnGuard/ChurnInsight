@@ -1,6 +1,6 @@
 package com.team42.churninsight.decision.decisionEngine;
 
-import com.team42.churninsight.prediction.enums.ValueCustomer;
+import com.team42.churninsight.economic.ValueCustomer;
 import com.team42.churninsight.profiling.enums.ProfileType;
 import com.team42.churninsight.risk.entity.RiskFlag;
 import com.team42.churninsight.risk.enums.FlagType;
