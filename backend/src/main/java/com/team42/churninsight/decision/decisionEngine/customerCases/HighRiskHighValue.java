@@ -5,8 +5,6 @@ import com.team42.churninsight.decision.decisionEngine.DecisionRule;
 import com.team42.churninsight.prediction.enums.ValueCustomer;
 import com.team42.churninsight.risk.enums.FlagType;
 
-import java.util.List;
-
 public class HighRiskHighValue {
 
     public static class InactivityRisk implements DecisionRule {
@@ -15,12 +13,12 @@ public class HighRiskHighValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.7
                     && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
-                    && r.flagType() == FlagType.INACTIVITY_RISK;
+                    && r.getFlagTypesList().contains(FlagType.INACTIVITY_RISK);
         }
 
         @Override
-        public List<String> getActions() {
-            return List.of("Llamada urgente + beneficio exclusivo + gestor de cuenta dedicado");
+        public String getAction() {
+            return "Llamada urgente + beneficio exclusivo + gestor de cuenta dedicado";
         }
     }
 
@@ -30,12 +28,12 @@ public class HighRiskHighValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.6
                     && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
-                    && r.flagType() == FlagType.FINANCIAL_RISK;
+                    && r.getFlagTypesList().contains(FlagType.FINANCIAL_RISK);
         }
 
         @Override
-        public List<String> getActions() {
-            return List.of("Reunión con gestor + plan de valor personalizado + descuento estratégico temporal");
+        public String getAction() {
+            return "Reunión con gestor + plan de valor personalizado + descuento estratégico temporal";
         }
     }
 
@@ -45,12 +43,12 @@ public class HighRiskHighValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.6
                     && r.valueCustomer() == ValueCustomer.HIGH_VALUE_CUSTOMER
-                    && r.flagType() == FlagType.PROMO_ABUSE;
+                    && r.getFlagTypesList().contains(FlagType.PROMO_ABUSE);
         }
 
         @Override
-        public List<String> getActions() {
-            return List.of("Llamada de retención + migración a programa de fidelización premium sin descuentos");
+        public String getAction() {
+            return "Llamada de retención + migración a programa de fidelización premium sin descuentos";
         }
     }
 }

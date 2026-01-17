@@ -4,8 +4,6 @@ import com.team42.churninsight.decision.decisionEngine.DecisionEngine;
 import com.team42.churninsight.decision.decisionEngine.DecisionRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class RecommendedActionService {
 
@@ -15,7 +13,7 @@ public class RecommendedActionService {
         this.decisionEngine = decisionEngine;
     }
 
-    public List<String> getRecommendation(DecisionRequest request) {
+    public String getRecommendation(DecisionRequest request) {
         return decisionEngine.getRecommendation(request);
     }
 }

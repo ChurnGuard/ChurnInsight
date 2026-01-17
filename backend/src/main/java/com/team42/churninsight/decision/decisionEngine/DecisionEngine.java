@@ -8,12 +8,12 @@ import java.util.List;
 @Component
 public final class DecisionEngine {
 
-    public List<String> getRecommendation(DecisionRequest request) {
+    public String getRecommendation(DecisionRequest request) {
         return decisionRuleList().stream()
                 .filter(r -> r.applies(request))
-                .findAny()
-                .map(DecisionRule::getActions)
-                .orElse(List.of());
+                .map(DecisionRule::getAction)
+                .findFirst()
+                .orElse(null);
     }
 
     private static List<DecisionRule> decisionRuleList() {
