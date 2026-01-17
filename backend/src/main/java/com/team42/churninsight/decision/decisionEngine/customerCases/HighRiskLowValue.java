@@ -2,7 +2,7 @@ package com.team42.churninsight.decision.decisionEngine.customerCases;
 
 import com.team42.churninsight.decision.decisionEngine.DecisionRequest;
 import com.team42.churninsight.decision.decisionEngine.DecisionRule;
-import com.team42.churninsight.prediction.enums.ValueCustomer;
+import com.team42.churninsight.economic.ValueCustomer;
 import com.team42.churninsight.risk.enums.FlagType;
 
 public class HighRiskLowValue {
@@ -13,7 +13,7 @@ public class HighRiskLowValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.6
                     && r.valueCustomer() == ValueCustomer.LOW_VALUE_CUSTOMER
-                    && r.getFlagTypesList().contains(FlagType.INACTIVITY_RISK);
+                    && r.riskFlagList().contains(FlagType.INACTIVITY_RISK);
         }
 
         @Override
@@ -28,7 +28,7 @@ public class HighRiskLowValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.5
                     && r.valueCustomer() == ValueCustomer.LOW_VALUE_CUSTOMER
-                    && r.getFlagTypesList().contains(FlagType.FINANCIAL_RISK);
+                    && r.riskFlagList().contains(FlagType.FINANCIAL_RISK);
         }
 
         @Override
@@ -43,7 +43,7 @@ public class HighRiskLowValue {
         public boolean applies(DecisionRequest r) {
             return r.probabilityChurn() > 0.6
                     && r.valueCustomer() == ValueCustomer.LOW_VALUE_CUSTOMER
-                    && r.getFlagTypesList().contains(FlagType.PROMO_ABUSE);
+                    && r.riskFlagList().contains(FlagType.PROMO_ABUSE);
         }
 
         @Override

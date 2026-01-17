@@ -12,7 +12,7 @@ public class CaseInStoreDealHunter {
         @Override
         public boolean applies(DecisionRequest r) {
             return r.profileType() == ProfileType.IN_STORE_DEAL_HUNTER
-                    && r.getFlagTypesList().contains(FlagType.PROMO_ABUSE)
+                    && r.riskFlagList().contains(FlagType.PROMO_ABUSE)
                     && r.probabilityChurn() > 0.6;
         }
 
@@ -27,7 +27,7 @@ public class CaseInStoreDealHunter {
         @Override
         public boolean applies(DecisionRequest r) {
             return r.profileType() == ProfileType.IN_STORE_DEAL_HUNTER
-                    && r.getFlagTypesList().isEmpty();
+                    && r.riskFlagList().isEmpty();
         }
 
         @Override

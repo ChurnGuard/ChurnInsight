@@ -12,7 +12,7 @@ public class CaseEssentialModerateBuyer {
         @Override
         public boolean applies(DecisionRequest r) {
             return r.profileType() == ProfileType.ESSENTIAL_MODERATE_BUYER
-                    && r.getFlagTypesList().contains(FlagType.FINANCIAL_RISK);
+                    && r.riskFlagList().contains(FlagType.FINANCIAL_RISK);
         }
 
         @Override
