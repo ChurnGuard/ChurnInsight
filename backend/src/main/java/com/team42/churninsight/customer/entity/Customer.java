@@ -49,9 +49,7 @@ public class Customer {
     public static Customer from(
             String customerId,
             Double priorityScore,
-            Double churnProbability,
-            ValueCustomer economicValue,
-            String recommendedAction
+            ValueCustomer economicValue
     ) {
         Customer cc = new Customer();
         cc.setExternalId(customerId);
