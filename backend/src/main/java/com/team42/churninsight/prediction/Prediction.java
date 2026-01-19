@@ -17,9 +17,12 @@ public class Prediction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //Urgente cambiar customerId a Long
-    @Column(name = "customer_id")
-    private String customerId;
+
+    //relacion a customer
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Long customerId;
+
     @Column(name = "transaction_id")
     private String transactionId;
     @Column(name = "churn_probability")
@@ -27,7 +30,6 @@ public class Prediction {
     @Enumerated(EnumType.STRING)
     @Column(name = "churn_status")
     private Churn churn;
-    //Posiblemente en desuso
     @Column(name = "recommended_action")
     private String recommendedAction;
     @Column(name = "prediction_date")
@@ -41,9 +43,9 @@ public class Prediction {
         }
     }
 
-    public static Prediction create (String customerId, String transactionId, Double probabilityChurn){
+    public static Prediction create ( String transactionId, Double probabilityChurn){
         Prediction newPrediction = new Prediction();
-        newPrediction.setCustomerId(customerId);
+
         newPrediction.setTransactionId(transactionId);
         newPrediction.setProbabilityChurn(probabilityChurn);
         newPrediction.calculateChurnStatus();

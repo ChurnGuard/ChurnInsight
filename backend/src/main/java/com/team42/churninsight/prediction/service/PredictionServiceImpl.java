@@ -37,32 +37,25 @@
  */
 
 package com.team42.churninsight.prediction.service;
-
 import com.team42.churninsight.common.exception.InvalidPredictionRequestException;
+import com.team42.churninsight.customer.entity.Customer;
 import com.team42.churninsight.decision.service.RecommendedActionService;
 import com.team42.churninsight.economic.EconomicService;
 import com.team42.churninsight.prediction.Prediction;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
 import com.team42.churninsight.prediction.api.dto.PredictionResponse;
 import com.team42.churninsight.prediction.client.ChurnModelClient;
-
 import com.team42.churninsight.prediction.enums.Churn;
 import com.team42.churninsight.economic.ValueCustomer;
 import com.team42.churninsight.prediction.repository.PredictionRepository;
-
-
 import com.team42.churninsight.profiling.enums.ProfileType;
 import com.team42.churninsight.profiling.service.ProfileService;
 import com.team42.churninsight.risk.RiskFlagService;
-import com.team42.churninsight.risk.entity.RiskFlag;
 import com.team42.churninsight.risk.enums.FlagType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 
@@ -118,16 +111,19 @@ public class PredictionServiceImpl implements PredictionService {
         String recomendation = recommendedActionService.getRecommendation(probability.doubleValue(), valueCustomer,flags,profileType);
 
 
-        Prediction entity = Prediction.create(
-                request.customerId(),
+        Customer customerEntity = Customer.from(request.customerId(),priorityScore,valueCustomer, economicValueScore,profileType);
+
+        //El idCustomer debe venir del genereado por la entidad Customer (no del id externo)
+        Prediction predictionEntity = Prediction.create(
                 request.transactionId(),
                 probability.doubleValue()
+
         );
 
-        Prediction saved = predictionRepository.save(entity);
+        //Prediction saved = predictionRepository.save(entity);
         //predictionRepository.save(entity);
 
-        boolean churn = entity.getChurn() == Churn.CHURN;
+        boolean churn = predictionEntity.getChurn() == Churn.CHURN;
         //boolean churn = entity.getChurn() == Churn.CHURN;
 
         // 4) Respuesta (necesario para persistencia)
@@ -135,7 +131,7 @@ public class PredictionServiceImpl implements PredictionService {
 
 
         return new PredictionResponse(
-                saved.getCustomerId(),    // en vez de request.customerId()
+                request.customerId(),
 
                 probability,               // o BigDecimal.valueOf(entity.getProbabilityChurn())
                 churn,

@@ -17,6 +17,7 @@ public record PredictionRequest(
                 regexp = "^C[A-Za-z0-9_-]*$",
                 message = "El ID debe comenzar con 'C' y solo puede contener letras, números, '-', '_' "
         )
+        //este id es el externo al sistema
         @JsonProperty("customer_id")
         String customerId,
 
