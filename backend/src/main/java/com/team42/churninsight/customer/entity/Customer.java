@@ -33,8 +33,7 @@ public class Customer {
     //relacion a prediction
     @OneToMany(
             mappedBy = "customer",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            fetch = FetchType.LAZY
     )
     private List<Prediction> predictionList = new ArrayList<>();
 
@@ -57,7 +56,7 @@ public class Customer {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public static Customer from(
+    public static Customer create(
             String externalId,
             BigDecimal priorityScore,
             ValueCustomer economicValue,

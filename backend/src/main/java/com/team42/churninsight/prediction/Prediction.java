@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -33,10 +35,8 @@ public class Prediction {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<RiskFlag> riskFlags = new ArrayList<>();
+    private Set<RiskFlag> riskFlags = new HashSet<>();
 
-    @Column(name = "transaction_id")
-    private String transactionId;
     @Column(name = "churn_probability")
     private Double probabilityChurn;
     @Enumerated(EnumType.STRING)
@@ -55,12 +55,12 @@ public class Prediction {
         }
     }
 
-    public static Prediction create ( String transactionId, Double probabilityChurn){
+    public static Prediction create ( Customer customer, Double probabilityChurn, String recommendedAction){
         Prediction newPrediction = new Prediction();
-
-        newPrediction.setTransactionId(transactionId);
+        newPrediction.setCustomer(customer);
         newPrediction.setProbabilityChurn(probabilityChurn);
         newPrediction.calculateChurnStatus();
+        newPrediction.setRecommendedAction(recommendedAction);
         newPrediction.setCreatedAt(LocalDateTime.now());
         return newPrediction;
     }

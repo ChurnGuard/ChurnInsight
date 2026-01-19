@@ -39,6 +39,7 @@
 package com.team42.churninsight.prediction.service;
 import com.team42.churninsight.common.exception.InvalidPredictionRequestException;
 import com.team42.churninsight.customer.entity.Customer;
+import com.team42.churninsight.customer.repository.CustomerRepository;
 import com.team42.churninsight.decision.service.RecommendedActionService;
 import com.team42.churninsight.economic.EconomicService;
 import com.team42.churninsight.prediction.Prediction;
@@ -51,12 +52,15 @@ import com.team42.churninsight.prediction.repository.PredictionRepository;
 import com.team42.churninsight.profiling.enums.ProfileType;
 import com.team42.churninsight.profiling.service.ProfileService;
 import com.team42.churninsight.risk.RiskFlagService;
+import com.team42.churninsight.risk.entity.RiskFlag;
 import com.team42.churninsight.risk.enums.FlagType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -69,6 +73,7 @@ public class PredictionServiceImpl implements PredictionService {
     private final ProfileService profileService;
     private final RiskFlagService riskFlagService;
     private final RecommendedActionService recommendedActionService;
+    private final CustomerRepository customerRepository;
     private static final int SCALE = 4;
 
 
@@ -110,25 +115,27 @@ public class PredictionServiceImpl implements PredictionService {
         // 5) Identificar accion recomendada
         String recomendation = recommendedActionService.getRecommendation(probability.doubleValue(), valueCustomer,flags,profileType);
 
+        //crea el customer y lo persiste para crear el id (antes debería chequear si ya existe buscando por externalId)
+        Customer customerEntity = Customer.create(request.customerId(),priorityScore,valueCustomer, economicValueScore,profileType);
+        customerRepository.save(customerEntity);
 
-        Customer customerEntity = Customer.from(request.customerId(),priorityScore,valueCustomer, economicValueScore,profileType);
-
-        //El idCustomer debe venir del genereado por la entidad Customer (no del id externo)
+        //crea la prediccion
         Prediction predictionEntity = Prediction.create(
-                request.transactionId(),
-                probability.doubleValue()
-
+                customerEntity,
+                probability.doubleValue(),
+                recomendation
         );
 
-        //Prediction saved = predictionRepository.save(entity);
-        //predictionRepository.save(entity);
+        //crea las entidades de FlagRisk
+        Set<RiskFlag>riskLfags = flags.stream()
+                .map(flagType -> new RiskFlag(predictionEntity, flagType))
+                .collect(Collectors.toSet());
+
+        //se agregan a la entidad Prediction y se persisten
+        predictionEntity.getRiskFlags().addAll(riskLfags);
+        predictionRepository.save(predictionEntity);
 
         boolean churn = predictionEntity.getChurn() == Churn.CHURN;
-        //boolean churn = entity.getChurn() == Churn.CHURN;
-
-        // 4) Respuesta (necesario para persistencia)
-        //var flags = new ArrayList<FlagType>();
-
 
         return new PredictionResponse(
                 request.customerId(),
