@@ -6,7 +6,7 @@ public enum ProductCategory {
     @JsonProperty("Electronics") ELECTRONICS,
     @JsonProperty("Toys") TOYS,
     @JsonProperty("Groceries") GROCERIES,
-    @JsonProperty("Home Goods") HOME_GOODS,
+    @JsonProperty("Home_Goods") HOME_GOODS,
     @JsonProperty("Clothing") CLOTHING,
     @JsonProperty("Sports") SPORTS,
     @JsonProperty("Books") BOOKS,
