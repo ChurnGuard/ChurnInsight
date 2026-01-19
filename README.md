@@ -4,23 +4,32 @@ ChurnInsight es una solución completa de predicción de churn (abandono de clie
 
 La solución está pensada para empresas con modelos de suscripción o contratos recurrentes (fintech, telecomunicaciones, streaming, e-commerce) que desean anticiparse a la cancelación de clientes y tomar acciones preventivas.
 
+---
+
 ## Estructura del Proyecto
 
 ```
 ChurnInsight/
-├── backend/          # API REST en Spring Boot (Java)
-├── data-science/     # Pipeline de datos y análisis exploratorio
-├── ml-service/       # Servicio de ML con FastAPI
-├── frontend/         # Interfaz de usuario
-├── infra/           # Infraestructura y despliegue
-└── docs/            # Documentación técnica
+├─ github/
+│  └─ workflows/                  # Pipeline Github Actions
+│       ├── ci-pipeline.yaml
+│       └─ run-main.yml           
+├── backend/                      # API REST en Spring Boot (Java)
+├── data-science/                 # Pipeline de datos y análisis exploratorio
+├── ml-service/                   # Servicio de ML con FastAPI
+├── frontend/                     # Interfaz de usuario
+├── infra/                        # Infraestructura y despliegue
+├── agentes/                      # Sistema Multi agentes
+└── docs/                         # Documentación técnica
 ```
+---
 
 ## Instalación
 
 ```bash
 git clone https://github.com/ChurnGuard/ChurnInsight.git
 ```
+---
 
 ## Data Science & ML Pipeline
 
@@ -30,21 +39,26 @@ El directorio `data-science/` contiene todo el pipeline de ingeniería y anális
 
 ```
 data-science/
+
 ├── data/
-│   ├── raw/                    # Datos originales sin procesar
-│   ├── interim/                # Datos en proceso de transformación
-│   ├── processed/              # Datos procesados y validados
-│   └── final/                  # Datasets listos para ML y análisis
+│   ├── raw/                          # Datos originales sin procesar
+│   ├── interim/                      # Datos en proceso de transformación
+│   ├── processed/                    # Datos procesados y validados
+│   └── final/                        # Datasets listos para ML y análisis
+│
 ├── models/
-│   ├── metrics_summary.csv     # Resumen del performance de los modelos ML.
-│   ├── rf_v1_baseline.joblib   # Serializacion del modelo ganador.
+│   ├── metrics_summary.csv           # Resumen del performance de los modelos ML.
+│   └── rf_v1_baseline.joblib         # Serializacion del modelo ganador.
+│
 ├── notebooks/
-│   ├── Data engineer.ipynb     # ETL, limpieza y validación de datos
-│   └── Data_Analyst.ipynb      # EDA y análisis exploratorio
-│   └── Data_Scientist.ipynb    # Creacion, entrenamiento y serializacion de modelos ML
+│   ├── Data engineer.ipynb           # ETL, limpieza y validación de datos
+│   └── Data_Analyst.ipynb            # EDA y análisis exploratorio
+│   └── Data_Scientist.ipynb          # Creacion, entrenamiento y serializacion de modelos ML
+│
 ├── scripts/
-│   ├── generar-datos-sinteticos.py  # Generación de datos sintéticos
-│   └── validar-datasets.py          # Validación de calidad de datos
+│   ├── generar-datos-sinteticos.py   # Generación de datos sintéticos
+│   └── validar-datasets.py           # Validación de calidad de datos
+│
 └── requirements.txt            # Dependencias de Python
 ```
 
@@ -180,6 +194,7 @@ GET /
   "service": "ml-service-v1"
 }
 ```
+---
 
 ## API Backend (Spring Boot)
 
@@ -208,8 +223,68 @@ Recibe los datos de un cliente y devuelve la predicción de churn (cancelación 
   "probabilidad": 0.81
 }
 ```
+---
 
-## Tecnologías
+## Agentes de automatización
+
+Sistema multi-agente en Python para analizar riesgo de churn a gran escala (≈4.000 clientes) y orquestar decisiones de retención alineadas al negocio. Combina procesamiento batch, resúmenes ejecutivos para managers, acciones reales selectivas (Email, Calendar,Sheet, Meet y Telegram) y automatización completa mediante GitHub Actions.
+
+El enfoque es **manager-first**: prioriza decisiones explicables, resultados agregados y realismo operativo por sobre la ejecución masiva de acciones automáticas.
+
+### Estructura
+
+```bash
+agentes/
+│ 
+├─ agents/
+│  ├─ decision_agent.py               # Reglas de negocio y lógica de decisión
+│  ├─ action_agent.py                 # Orquestador de canales
+│  ├─ aggregation_agent.py            # Agregaciones y resúmenes
+│  ├─ google_agents.py                # Gmail, Calendar, Sheets
+│  └─ telegram_agent.py               # Integración Telegram
+│
+├─ utils/
+│  ├─ flags_utils.py                  # Feature flags y switches
+│  └─ generate_churn_csv.py           # Generador de CSV de churn
+│
+├─ data/
+│  ├─ customers_with_churn_prob.csv   # Clientes con score de churn
+│  └─ rf_v1_baseline_train.csv        # Dataset de entrenamiento
+│
+├─ models/
+│  └─ churn_model.joblib              # Modelo Random Forest
+│
+├─ config/
+│  └─ credentials_example.json        # Ejemplo de credenciales
+│
+├─ scripts/
+│  └─ generate_refresh_token.py       # OAuth Google (una sola vez)
+│
+├─ .env example                       # Ejemplo de variables de entorno secretas
+├─ main.py                            # Ejecución batch principal
+├─ README.md
+└─ requirements.txt
+
+```
+### Agente de acción (Orquestador central)
+
+Todas las ejecuciones se realizan mediante:
+
+```python
+action_agent( )
+```
+
+El Agente de Acción ejecuta cada acción del cliente a través de un único orquestador, activando el canal adecuado según el riesgo de abandono:
+
+- Correo Electrónico: Envía correos electrónicos personalizados o resumidos a los gerentes.
+
+- Calendario: Programa reuniones y genera enlaces de Google Meet para clientes de alto riesgo.
+
+- Telegrama: Envía alertas críticas o mensajes de interacción a través del bot de Telegram.
+
+- Hoja de Auditoría: Registra acciones y resúmenes de gerentes en Hojas de Cálculo de Google para auditorías e informes. 
+
+---
 
 ### Backend
 
@@ -225,6 +300,16 @@ Recibe los datos de un cliente y devuelve la predicción de churn (cancelación 
 - [FastAPI](https://fastapi.tiangolo.com/) - Framework para ML service
 - [Pydantic](https://docs.pydantic.dev/) - Validación de datos
 
+### Agentes de automatización
+
+- [Google APIs](https://developers.google.com/) - Integración con Gmail, Calendar, Sheets y Google Meet
+- [Telegram Bot API](https://core.telegram.org/bots/api) - Envío de alertas y mensajes automatizados
+- [OAuth 2.0](https://oauth.net/2/) - Autenticación y autorización segura para APIs
+- [python-dotenv](https://pypi.org/project/python-dotenv/) - Gestión de variables de entorno
+- [GitHub Actions](https://docs.github.com/en/actions) - Automatización batch y ejecución programada
+
+---
+
 ## Documentación
 
 ### Documentación Técnica
@@ -232,6 +317,7 @@ Recibe los datos de un cliente y devuelve la predicción de churn (cancelación 
 - **Data Engineering**: Ver [`docs/Data-Engineer/documentacion.md`](docs/Data%20Engineer.md) para detalles del pipeline ETL, validación de datos y reglas de negocio
 - **Arquitectura OCI**: Diagramas de infraestructura en [`docs/OCI/`](docs/OCI/)
 - **Estrategia de Branching**: Ver [`docs/branching/estrategia-branching.md`](docs/branching/estrategia-branching.md)
+- **Agentes de automatización**: Ver [`docs/Agentes/Multi_agentes.md`](docs/Agentes/Multi_agentes.md)
 
 ### API Documentation (Swagger)
 
@@ -242,6 +328,8 @@ Desde allí se pueden:
 - Ver los endpoints disponibles
 - Probar requests en vivo
 - Consultar modelos de datos y schemas
+
+---
 
 ## 👥 Participantes
 

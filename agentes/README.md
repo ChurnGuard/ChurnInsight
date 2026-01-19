@@ -73,11 +73,7 @@ Dado un archivo CSV con datos de clientes + probabilidad de churn (generada por 
 **⚡ ⚡ Automatización: main.py se ejecuta completamente vía GitHub Actions, disparando el main.py, el reporte al manager y todos los canales de acción.
 
 ```bash
-auto-retention-agents/
-│ 
-├─ github/
-│  └─ workflows/
-│       └─ run-main.yml               # Ejecuta main.py en push o schedule
+agentes/
 │ 
 ├─ agents/
 │  ├─ decision_agent.py               # Reglas de negocio y lógica de decisión
