@@ -10,27 +10,17 @@ import java.time.LocalDate;
 
 public record PredictionRequest(
 
-        //Identificadores
+        // Identificadores (primero como en el JSON)
         @NotBlank
         @Size(min = 3, max = 36)
         @Pattern(
                 regexp = "^C[A-Za-z0-9_-]*$",
                 message = "El ID debe comenzar con 'C' y solo puede contener letras, números, '-', '_' "
         )
-        //este id es el externo al sistema
         @JsonProperty("customer_id")
         String customerId,
 
-        @NotBlank
-        @Size(min = 3, max = 36)
-        @Pattern(
-                regexp = "^T[A-Za-z0-9_-]*$",
-                message = "El ID debe comenzar con 'T' y solo puede contener letras, números, '-', '_' "
-        )
-        @JsonProperty("transaction_id")
-        String transactionId,
-
-        //Demográficas
+        // Demográficas
         @NotNull
         @Min(0)
         @Max(120)
@@ -48,7 +38,7 @@ public record PredictionRequest(
         @JsonProperty("number_of_children")
         Integer numberOfChildren,
 
-        //SocioEconómicas
+        // SocioEconómicas
         @NotNull
         @JsonProperty("income_bracket")
         IncomeBracket incomeBracket,
@@ -60,7 +50,7 @@ public record PredictionRequest(
         @NotNull
         Occupation occupation,
 
-        //Programa de lealtad / flags
+        // Programa de lealtad / flags
         @NotNull
         @JsonProperty("loyalty_program")
         Boolean loyaltyProgram,
@@ -69,20 +59,27 @@ public record PredictionRequest(
         @JsonProperty("promo_flag")
         Boolean promoFlag,
 
-        //Fechas - Formato "%Y-%m-%d" => ISO 8601
+        @JsonProperty("membership_years")
+        Integer membershipYears,
+
+        // Identificador de transacción
+        @NotBlank
+        @Size(min = 3, max = 36)
+        @Pattern(
+                regexp = "^T[A-Za-z0-9_-]*$",
+                message = "El ID debe comenzar con 'T' y solo puede contener letras, números, '-', '_' "
+        )
+        @JsonProperty("transaction_id")
+        String transactionId,
+
+        // Fechas de transacción
         @NotNull
         @PastOrPresent
         @JsonProperty("transaction_date")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate transactionDate,
 
-        @NotNull
-        @PastOrPresent
-        @JsonProperty("last_purchase_date")
-        @JsonFormat(pattern = "dd/MM/yyyy")
-        LocalDate lastPurchaseDate,
-
-        //Producto / transacción
+        // Producto / transacción
         @NotNull
         @JsonProperty("product_category")
         ProductCategory productCategory,
@@ -96,9 +93,36 @@ public record PredictionRequest(
         @JsonProperty("unit_price")
         BigDecimal unitPrice,
 
-        //Métricas agregadas
-        @JsonProperty("membership_years")
-        Integer membershipYears,
+        @JsonProperty("promotion_type")
+        PromotionType promotionType,
+
+        // Fechas adicionales
+        @NotNull
+        @PastOrPresent
+        @JsonProperty("last_purchase_date")
+        @JsonFormat(pattern = "dd/MM/yyyy")
+        LocalDate lastPurchaseDate,
+
+        // Métricas de comportamiento
+        @Min(0)
+        @JsonProperty("days_since_last_purchase")
+        Integer daysSinceLastPurchase,
+
+        @Min(0)
+        @JsonProperty("total_purchases")
+        Integer totalPurchases,
+
+        @Min(0)
+        @JsonProperty("total_transactions")
+        Integer totalTransactions,
+
+        @Min(0)
+        @JsonProperty("total_items_purchased")
+        Integer totalItemsPurchased,
+
+        @DecimalMin(value = "0.0")
+        @JsonProperty("total_sales")
+        BigDecimal totalSales,
 
         @DecimalMin(value = "0.0")
         @JsonProperty("avg_purchase_value")
@@ -109,10 +133,15 @@ public record PredictionRequest(
         BigDecimal purchaseFrequency,
 
         @DecimalMin(value = "0.0")
-        // @DecimalMax(value = "1.0")
         @JsonProperty("avg_discount_used")
         BigDecimal avgDiscountUsed,
 
+        @DecimalMin(value = "0.0")
+        @DecimalMax(value = "1.0")
+        @JsonProperty("promotion_effectiveness")
+        BigDecimal promotionEffectiveness,
+
+        // Métricas de canal
         @Min(0)
         @JsonProperty("online_purchases")
         Integer onlinePurchases,
@@ -120,34 +149,6 @@ public record PredictionRequest(
         @Min(0)
         @JsonProperty("in_store_purchases")
         Integer inStorePurchases,
-
-        @DecimalMin(value = "0.0")
-        @JsonProperty("total_sales")
-        BigDecimal totalSales,
-
-        @Min(0)
-        @JsonProperty("total_transactions")
-        Integer totalTransactions,
-
-        @Min(0)
-        @JsonProperty("total_items_purchased")
-        Integer totalItemsPurchased,
-        
-        @JsonProperty("promotion_type")
-        PromotionType promotionType,
-
-        @DecimalMin(value = "0.0")
-        @DecimalMax(value = "1.0")
-        @JsonProperty("promotion_effectiveness")
-        BigDecimal promotionEffectiveness,
-
-        @Min(0)
-        @JsonProperty("days_since_last_purchase")
-        Integer daysSinceLastPurchase,
-
-        @Min(0)
-        @JsonProperty("total_purchases")
-        Integer totalPurchases,
 
         @DecimalMin(value = "0.0")
         @DecimalMax(value = "1.0")
