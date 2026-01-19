@@ -3,9 +3,7 @@ package com.team42.churninsight.risk.entity;
 import com.team42.churninsight.prediction.Prediction;
 import com.team42.churninsight.risk.enums.FlagType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +19,8 @@ public class RiskFlag {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "prediction_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Prediction prediction;
 
     @Enumerated(EnumType.STRING)

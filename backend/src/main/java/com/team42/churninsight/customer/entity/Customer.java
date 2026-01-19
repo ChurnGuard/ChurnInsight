@@ -4,9 +4,7 @@ import com.team42.churninsight.economic.ValueCustomer;
 import com.team42.churninsight.prediction.Prediction;
 import com.team42.churninsight.profiling.enums.ProfileType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Entity
 @Table( name = "customers", indexes = {
         @Index(name = "idx_priority_score_desc", columnList = "priorityScore DESC"),
@@ -35,6 +34,8 @@ public class Customer {
             mappedBy = "customer",
             fetch = FetchType.LAZY
     )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Prediction> predictionList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

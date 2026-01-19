@@ -4,9 +4,7 @@ import com.team42.churninsight.customer.entity.Customer;
 import com.team42.churninsight.prediction.enums.Churn;
 import com.team42.churninsight.risk.entity.RiskFlag;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,6 +35,8 @@ public class Prediction {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<RiskFlag> riskFlags = new HashSet<>();
 
     @Column(name = "churn_probability")
