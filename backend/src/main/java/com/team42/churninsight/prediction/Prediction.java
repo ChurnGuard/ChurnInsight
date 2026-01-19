@@ -18,7 +18,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "predictions")
+@Table(name = "predictions",  indexes = {
+        @Index(name = "idx_customer_date", columnList = "customer_id, prediction_date DESC")
+})
 public class Prediction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +41,7 @@ public class Prediction {
 
     @Column(name = "churn_probability")
     private Double probabilityChurn;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "churn_status")
     private Churn churn;

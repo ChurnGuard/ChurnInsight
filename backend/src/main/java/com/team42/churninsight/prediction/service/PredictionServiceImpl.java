@@ -127,12 +127,12 @@ public class PredictionServiceImpl implements PredictionService {
         );
 
         //crea las entidades de FlagRisk
-        Set<RiskFlag>riskLfags = flags.stream()
+        Set<RiskFlag>riskFlagsEntities = flags.stream()
                 .map(flagType -> new RiskFlag(predictionEntity, flagType))
                 .collect(Collectors.toSet());
 
         //se agregan a la entidad Prediction y se persisten
-        predictionEntity.getRiskFlags().addAll(riskLfags);
+        predictionEntity.getRiskFlags().addAll(riskFlagsEntities);
         predictionRepository.save(predictionEntity);
 
         boolean churn = predictionEntity.getChurn() == Churn.CHURN;

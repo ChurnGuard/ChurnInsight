@@ -17,9 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(
-        name = "customers",
-        uniqueConstraints = @UniqueConstraint(name = "uk_customer_critical_customer_id", columnNames = "customer_id")
+@Table( name = "customers", indexes = {
+        @Index(name = "idx_priority_score_desc", columnList = "priorityScore DESC"),
+    }
 )
 public class Customer {
 
@@ -27,7 +27,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "external_id", nullable = false)
+    @Column(name = "external_id", nullable = false, unique = true)
     private String externalId;
 
     //relacion a prediction
@@ -47,6 +47,7 @@ public class Customer {
     @Column(name = "priority_score", nullable = false)
     private BigDecimal priorityScore;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "customer_profile", nullable = false)
     private ProfileType profileType;
 
@@ -70,6 +71,7 @@ public class Customer {
         cc.setEconomicValueScore(economicValueScore);
         cc.setProfileType(profileType);
         cc.setCreatedAt(LocalDateTime.now());
+        cc.setUpdatedAt(LocalDateTime.now());
         return cc;
     }
 
@@ -85,6 +87,4 @@ public class Customer {
         this.profileType = profileType;
         this.updatedAt = LocalDateTime.now();
     }
-
-
 }
