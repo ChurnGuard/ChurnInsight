@@ -27,6 +27,7 @@ public class Prediction {
     @Enumerated(EnumType.STRING)
     @Column(name = "churn_status")
     private Churn churn;
+    //Posiblemente en desuso
     @Column(name = "recommended_action")
     private String recommendedAction;
     @Column(name = "prediction_date")

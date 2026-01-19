@@ -3,7 +3,7 @@ CREATE TABLE `customers`(
     `external_id` VARCHAR(255) NOT NULL,
     -- DECIMAL(5, 4) -> DOUBLE
     `priority_score` DOUBLE NOT NULL,
-    -- Se maneja en predicitions pero está en JPA
+    -- Se maneja en predicitions pero está en customers
     `churn_probability` DOUBLE NOT NULL,
     `economic_value` ENUM(
         'HIGH_VALUE_CUSTOMER',
@@ -11,7 +11,7 @@ CREATE TABLE `customers`(
         'LOW_VALUE_CUSTOMER'
     ) NOT NULL,
     `economic_value_score` DECIMAL(5, 4) NOT NULL,
-    -- Se maneja en predictions pero está en JPA
+    -- Se maneja en predictions pero está en customers
     `recommended_action` VARCHAR(255) NOT NULL,
     `customer_profile` ENUM(
         'IN_STORE_DEAL_HUNTER',
