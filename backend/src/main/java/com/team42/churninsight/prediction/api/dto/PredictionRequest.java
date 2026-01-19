@@ -72,7 +72,7 @@ public record PredictionRequest(
         @NotNull
         @PastOrPresent
         @JsonProperty("transaction_date")
-        @JsonFormat(pattern = "dd/MM/yyyy")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate transactionDate,
 
         @NotNull
@@ -108,7 +108,7 @@ public record PredictionRequest(
         BigDecimal purchaseFrequency,
 
         @DecimalMin(value = "0.0")
-        @DecimalMax(value = "1.0")
+        // @DecimalMax(value = "1.0")
         @JsonProperty("avg_discount_used")
         BigDecimal avgDiscountUsed,
 

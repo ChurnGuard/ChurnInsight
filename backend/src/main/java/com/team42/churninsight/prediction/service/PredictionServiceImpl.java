@@ -39,20 +39,32 @@
 package com.team42.churninsight.prediction.service;
 
 import com.team42.churninsight.common.exception.InvalidPredictionRequestException;
+import com.team42.churninsight.decision.service.RecommendedActionService;
+import com.team42.churninsight.economic.EconomicService;
 import com.team42.churninsight.prediction.Prediction;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
 import com.team42.churninsight.prediction.api.dto.PredictionResponse;
 import com.team42.churninsight.prediction.client.ChurnModelClient;
 
 import com.team42.churninsight.prediction.enums.Churn;
+import com.team42.churninsight.economic.ValueCustomer;
 import com.team42.churninsight.prediction.repository.PredictionRepository;
 
 
+import com.team42.churninsight.profiling.enums.ProfileType;
+import com.team42.churninsight.profiling.service.ProfileService;
+import com.team42.churninsight.risk.RiskFlagService;
+import com.team42.churninsight.risk.entity.RiskFlag;
+import com.team42.churninsight.risk.enums.FlagType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +72,10 @@ public class PredictionServiceImpl implements PredictionService {
 
     private final ChurnModelClient churnModelClient;
     private final PredictionRepository predictionRepository;
+    private final EconomicService economicService;
+    private final ProfileService profileService;
+    private final RiskFlagService riskFlagService;
+    private final RecommendedActionService recommendedActionService;
     private static final int SCALE = 4;
 
 
@@ -82,6 +98,26 @@ public class PredictionServiceImpl implements PredictionService {
         BigDecimal rawpProbability = churnModelClient.predictChurn(request);
         BigDecimal probability = normalizeProbability(rawpProbability);
 
+        // 2) Se calcula el ValueCustomer/PriorityScore
+        BigDecimal economicValueScore = economicService.economicValueScore(request.totalSales(),request.avgPurchaseValue(),request.totalTransactions());
+        ValueCustomer valueCustomer = economicService.categorize(economicValueScore);
+        BigDecimal priorityScore = economicService.priorityScore(probability,economicValueScore);
+        System.out.println("EconomicValueScore: "+economicValueScore);
+        System.out.println("ValueCustomer: "+valueCustomer);
+        System.out.println("PriorityScore: "+priorityScore);
+
+        // 3) Calcular el ProfileType
+        ProfileType profileType = profileService.identifyProfile(request);
+        System.out.println("ProfileType: "+profileType);
+
+        // 4) Calcular las RiskFlags
+        Set<FlagType> flags = riskFlagService.evaluateFlags(request);
+        System.out.println("RiskFlags: "+flags.toString());
+
+        // 5) Identificar accion recomendada
+        String recomendation = recommendedActionService.getRecommendation(probability.doubleValue(), valueCustomer,flags,profileType);
+
+
         Prediction entity = Prediction.create(
                 request.customerId(),
                 request.transactionId(),
@@ -91,19 +127,27 @@ public class PredictionServiceImpl implements PredictionService {
         Prediction saved = predictionRepository.save(entity);
         //predictionRepository.save(entity);
 
-        boolean churn = saved.getChurn() == Churn.CHURN;
+        boolean churn = entity.getChurn() == Churn.CHURN;
         //boolean churn = entity.getChurn() == Churn.CHURN;
 
-/*      Ya no es necesario si entidad Prediction es la fuente de verdad y vamos a persistir entity
-        // 3) Decisión (umbral por ahora fijo)
-        boolean churn = probability.compareTo(DEFAULT_THRESHOLD) >= 0;
-*/
         // 4) Respuesta (necesario para persistencia)
+        //var flags = new ArrayList<FlagType>();
+
+
         return new PredictionResponse(
                 saved.getCustomerId(),    // en vez de request.customerId()
-                //entity.getCustomerId(),
+
+                probability,               // o BigDecimal.valueOf(entity.getProbabilityChurn())
                 churn,
-                probability               // o BigDecimal.valueOf(entity.getProbabilityChurn())
+
+                valueCustomer,
+                priorityScore,
+
+                flags,
+
+                profileType,
+
+                recomendation
         );
     }
 

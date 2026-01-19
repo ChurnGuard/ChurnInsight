@@ -25,6 +25,8 @@ public class Prediction {
     private Double probabilityChurn;
     @Enumerated(EnumType.STRING)
     private Churn churn;
+    @Column(name = "recommended_action")
+    private String recommendedAction;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
