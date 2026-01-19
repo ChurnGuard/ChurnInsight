@@ -7,6 +7,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${SPRING_DATASOURCE_USERNAME:churnuser}
     password: ${SPRING_DATASOURCE_PASSWORD:churnpass}
+    hikari:
+      connection-timeout: 30000
+      initialization-fail-timeout: 0
 
   jpa:
     hibernate:

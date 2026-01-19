@@ -12,16 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "risk_flag")
+@Table(name = "risk_flags")
 public class RiskFlag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "prediction_id")
+    @Column(name = "prediction_id", nullable = false)
     private Long predictionId;
-    @Column(name = "flag_type")
+    @Column(name = "flag_type", nullable = false)
     private FlagType flagType;
-    @Column(name = "detected_at")
+    @Column(name = "detected_at", nullable = false)
     private LocalDateTime detectedAt;
 
 

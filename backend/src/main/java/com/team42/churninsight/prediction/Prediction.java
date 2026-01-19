@@ -17,17 +17,19 @@ public class Prediction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //Urgente cambiar customerId a Long
     @Column(name = "customer_id")
     private String customerId;
     @Column(name = "transaction_id")
     private String transactionId;
-    @Column(name = "probability_churn")
+    @Column(name = "churn_probability")
     private Double probabilityChurn;
     @Enumerated(EnumType.STRING)
+    @Column(name = "churn_status")
     private Churn churn;
     @Column(name = "recommended_action")
     private String recommendedAction;
-    @Column(name = "created_at")
+    @Column(name = "prediction_date")
     private LocalDateTime createdAt;
 
     public void calculateChurnStatus() {

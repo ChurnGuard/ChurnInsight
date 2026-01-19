@@ -1,11 +1,13 @@
 package com.team42.churninsight.customer.entity;
 
 import com.team42.churninsight.economic.ValueCustomer;
+import com.team42.churninsight.profiling.enums.ProfileType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "customer_critical",
+        name = "customers",
         uniqueConstraints = @UniqueConstraint(name = "uk_customer_critical_customer_id", columnNames = "customer_id")
 )
 public class CustomerCritical {
@@ -22,7 +24,7 @@ public class CustomerCritical {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "customer_id", nullable = false)
+    @Column(name = "external_id", nullable = false)
     private String customerId;
 
     @Column(name = "priority_score", nullable = false)
@@ -35,11 +37,20 @@ public class CustomerCritical {
     @Column(name = "economic_value", nullable = false)
     private ValueCustomer economicValue;
 
+    @Column(name = "economic_value_score", nullable = false)
+    private BigDecimal economicValueScore;
+
     @Column(name = "recommended_action", nullable = false)
     private String recommendedAction;
 
+    @Column(name = "customer_profile", nullable = false)
+    private ProfileType profileType;
+
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     public static CustomerCritical from(
             String customerId,
@@ -70,4 +81,6 @@ public class CustomerCritical {
         this.recommendedAction = recommendedAction;
         this.updatedAt = LocalDateTime.now();
     }
+
+
 }
