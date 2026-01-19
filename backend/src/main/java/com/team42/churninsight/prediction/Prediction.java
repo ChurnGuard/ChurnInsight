@@ -1,12 +1,16 @@
 package com.team42.churninsight.prediction;
 
+import com.team42.churninsight.customer.entity.Customer;
 import com.team42.churninsight.prediction.enums.Churn;
+import com.team42.churninsight.risk.entity.RiskFlag;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +25,15 @@ public class Prediction {
     //relacion a customer
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
-    private Long customerId;
+    private Customer customer;
+
+    //relacion a riskflags
+    @OneToMany(
+            mappedBy = "prediction",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<RiskFlag> riskFlags = new ArrayList<>();
 
     @Column(name = "transaction_id")
     private String transactionId;
