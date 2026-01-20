@@ -22,10 +22,12 @@ ChurnInsight/
 │       ├── ci-pipeline.yaml
 │       └── run-main.yml
 ├── backend/              # API REST en Spring Boot 3.5 (Java 17)
-│   ├── api/              # Controllers y DTOs
-│   ├── service/          # Lógica de negocio
-│   ├── repository/       # Capa de persistencia (JPA/MySQL)
-│   ├── client/           # Cliente HTTP para ML Service
+│   ├── prediction/       # Modulo principal de negocio
+│   │   ├── api/          # Controllers y DTOs
+│   │   ├── service/      # Lógica de negocio
+│   │   ├── repository/   # Capa de persistencia (JPA/MySQL)
+│   │   └── client/       # Cliente HTTP para ML Service
+│   ├── customer/         # Persistencia y visualizacion de Clientes Críticos
 │   ├── decision/         # Motor de recomendaciones
 │   ├── economic/         # Clasificación de valor económico
 │   ├── profiling/        # Perfilado de clientes
@@ -139,21 +141,24 @@ curl -X POST http://localhost:8080/api/v1/predictions \
 
 ### Arquitectura
 
-El backend implementa una **arquitectura hexagonal limpia** con separación de capas:
+El backend implementa una **arquitectura modular limpia** con separación de capas dentro de cada feature:
 
 ```
 backend/
-├── api/              # Capa de presentación (Controllers, DTOs)
-├── service/          # Capa de lógica de negocio
-├── repository/       # Capa de persistencia (JPA)
-├── client/           # Clientes externos (ML Service)
-├── entity/           # Entidades de dominio
-├── config/           # Configuración (WebClient, JPA)
-├── exception/        # Manejo global de excepciones
-├── decision/         # Motor de decisiones
-├── economic/         # Clasificación de valor económico
-├── profiling/        # Perfilado de clientes
-└── risk/             # Sistema de flags de riesgo
+├── feature/            # Funcionalidad específica 
+│   ├──api/             # Capa de presentación (Controllers, DTOs)
+│   ├── service/        # Capa de lógica de negocio
+│   ├── repository/     # Capa de persistencia (JPA)
+│   ├── client/         # Clientes externos (ML Service)
+│   └── entity/         # Entidades de dominio
+├── prediction/         # Modulo principal de negocio
+├── decision/           # Feature - Motor de decisiones
+├── economic/           # Feature - Clasificación de valor económico
+├── profiling/          # Feature - Perfilado de clientes
+├── risk/               # Feature - Sistema de flags de riesgo
+├── customer/           # Feature - Persiste y muestra clientes críticos
+├── config/             # Configuración (WebClient, JPA)
+└── exception/          # Manejo global de excepciones
 ```
 
 ### Endpoints Disponibles
@@ -181,7 +186,7 @@ Endpoint principal que procesa una transacción de cliente y retorna:
   "marital_status": "MARRIED",
   "number_of_children": 2,
   "income_bracket": "MEDIUM",
-  "education_level": "BACHELORS",
+  "education_level": "BACHELOR_S",
   "occupation": "EMPLOYED",
   "loyalty_program": true,
   "promo_flag": false,
@@ -209,7 +214,7 @@ Endpoint principal que procesa una transacción de cliente y retorna:
 ```json
 {
   "customer_id": "C12345",
-  "probability_churn": 0.2345,
+  "probability_churn": 0.24,
   "churn": false,
   "economic_value": "HIGH_VALUE_CUSTOMER",
   "priority_score": 0.15,
@@ -254,11 +259,13 @@ Retorna la lista de clientes con alta probabilidad de churn y alto valor económ
 
 **IncomeBracket**: `LOW`, `MEDIUM`, `HIGH`
 
-**EducationLevel**: `HIGH_SCHOOL`, `BACHELORS`, `MASTERS`, `PHD`
+**EducationLevel**: `HIGH_SCHOOL`, `BACHELOR_S`, `MASTER_S`, `PHD`
 
 **Occupation**: `EMPLOYED`, `SELF_EMPLOYED`, `UNEMPLOYED`, `STUDENT`, `RETIRED`
 
 **ProductCategory**: `GROCERIES`, `ELECTRONICS`, `CLOTHING`, `HOME`, `BEAUTY`, `SPORTS`, `BOOKS`, `TOYS`
+
+**PromotionType**: `NO_PROMOTION`, `TWENTY_PERCENT_OFF`, `BUY_ONE_GET_ONE_FREE`, `SEASONAL_DISCONT`
 
 **ValueCustomer** (Valor Económico):
 
