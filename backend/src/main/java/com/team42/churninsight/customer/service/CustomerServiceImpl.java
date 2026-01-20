@@ -1,8 +1,8 @@
 package com.team42.churninsight.customer.service;
 
 import com.team42.churninsight.customer.dto.CriticalCustomerResponse;
-import com.team42.churninsight.customer.entity.CustomerCritical;
-import com.team42.churninsight.customer.repository.CustomerCriticalRepository;
+import com.team42.churninsight.customer.entity.Customer;
+import com.team42.churninsight.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-    private final CustomerCriticalRepository repository;
+    private final CustomerRepository repository;
 
     @Override
     public List<CriticalCustomerResponse> getCriticalCustomers() {
@@ -22,13 +22,11 @@ public class CustomerServiceImpl implements CustomerService {
                 .toList();
     }
 
-    private CriticalCustomerResponse toResponse(CustomerCritical cc) {
+    private CriticalCustomerResponse toResponse(Customer cc) {
         return new CriticalCustomerResponse(
-                cc.getCustomerId(),
-                cc.getChurnProbability(),
+                cc.getExternalId(),
                 cc.getEconomicValue(),
-                cc.getPriorityScore(),
-                cc.getRecommendedAction()
+                cc.getPriorityScore()
         );
     }
 }

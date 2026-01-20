@@ -1,10 +1,9 @@
 package com.team42.churninsight.risk.entity;
 
+import com.team42.churninsight.prediction.Prediction;
 import com.team42.churninsight.risk.enums.FlagType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,21 +11,27 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "risk_flag")
+@Table(name = "risk_flags")
 public class RiskFlag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "prediction_id")
-    private Long predictionId;
-    @Column(name = "flag_type")
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "prediction_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Prediction prediction;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "flag_type", nullable = false)
     private FlagType flagType;
-    @Column(name = "detected_at")
+    @Column(name = "detected_at", nullable = false)
     private LocalDateTime detectedAt;
 
 
-    public RiskFlag(Long predictionId, FlagType flagType) {
-        this.predictionId = predictionId;
+    public RiskFlag(Prediction prediction, FlagType flagType) {
+        this.prediction = prediction;
         this.flagType = flagType;
         this.detectedAt = LocalDateTime.now();
     }

@@ -7,15 +7,20 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${SPRING_DATASOURCE_USERNAME:churnuser}
     password: ${SPRING_DATASOURCE_PASSWORD:churnpass}
+    hikari:
+      connection-timeout: 30000
+      initialization-fail-timeout: 0
 
   jpa:
     hibernate:
-      ddl-auto: update  # Mantiene el esquema y aplica cambios sin borrar datos
+      ddl-auto: none
     show-sql: true  # Muestra las queries SQL en consola
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
-
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
 ml-service:
   url: ${ML_SERVICE_URL:http://localhost:8000}
