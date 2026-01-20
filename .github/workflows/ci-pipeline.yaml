@@ -2,13 +2,14 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-     - "backend/src/**"
+    branches: [ "main", "infra/163-optimizar-pipeline-ci" ]
+    paths: &shared_paths
+     - "backend/**"
      - "backend/pom.xml"
      - "backend/Dockerfile"
      - "ml-service/**"
      - "docker-compose.yaml"
+     - ".github/workflows/ci-pipeline.yaml"
 
      - "!docs/**"
      - "!LICENSE"
@@ -17,17 +18,24 @@ on:
      - "!**.drawio"
      - "!data-science/notebooks/**"
      - "!data-science/data/**.csv"
-     - "!.gitignore" 
+     - "!.gitignore"
+
+  pull_request:
+    branches: [ "main" ]
+    paths: *shared_paths
      
 jobs:
 
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
 
     permissions: 
       contents: read
       packages: write
+
+    strategy:
+      matrix:
+        service: [backend, ml-service]
 
     steps:
     
@@ -37,12 +45,6 @@ jobs:
       - name: Lowercase Repository Name
         run: echo "REPO_LC=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
       
-      - name: Build Backend
-        run: docker build -t ghcr.io/${{ env.REPO_LC }}/backend:latest ./backend
-
-      - name: Build ML Service
-        run: docker build -t ghcr.io/${{ env.REPO_LC }}/ml-service:latest ./ml-service
-
       - name: GHCR Login
         uses: docker/login-action@v3
         with:  
@@ -50,9 +52,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Backend Image
-        run: docker push ghcr.io/${{ env.REPO_LC }}/backend:latest
-
-      - name: Push ML-Service Image
-        run: docker push ghcr.io/${{ env.REPO_LC }}/ml-service:latest
-    
+      - name: build ${{ matrix.service }}
+        run: docker build -t ghcr.io/${{ env.REPO_LC }}/${{ matrix.service }}:latest ./${{ matrix.service }}
+          
+      - name: push ${{ matrix.service }}
+        if: github.event_name != 'pull_request'
+        run: docker push ghcr.io/${{ env.REPO_LC }}/${{ matrix.service }}:latest
