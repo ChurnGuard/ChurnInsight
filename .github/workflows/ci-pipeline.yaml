@@ -56,5 +56,5 @@ jobs:
         run: docker build -t ghcr.io/${{ env.REPO_LC }}/${{ matrix.service }}:latest ./${{ matrix.service }}
           
       - name: push ${{ matrix.service }}
-        if: github.event_name != 'pull_request'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: docker push ghcr.io/${{ env.REPO_LC }}/${{ matrix.service }}:latest
