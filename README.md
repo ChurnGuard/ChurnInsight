@@ -741,16 +741,16 @@ Identificación de 3 perfiles principales:
 
 **3️⃣ Análisis de Churn**:
 
-- Tasa global de churn: ~32%
+- Tasa global de churn: ~28.5%
 - Factores predictivos principales:
-  - Days since last purchase (correlación: 0.68)
-  - Purchase frequency (correlación: -0.54)
-  - Avg purchase value (correlación: -0.42)
+  - Days since last purchase (p-value ~0.00)
+  - Purchase frequency (p-value ~0.01)
+  - Avg purchase value (p-value ~0.04)
 - Análisis de supervivencia (Kaplan-Meier)
 
 **4️⃣ Análisis de Promociones**:
 
-- Impacto en ventas (+25% en promedio)
+- Uso de promociones ~92.54%
 - Efectividad por tipo de promoción
 - Sensibilidad a promociones por segmento
 
@@ -761,7 +761,7 @@ Identificación de 3 perfiles principales:
 - PCA para reducción dimensional (10 componentes explican 95% varianza)
 
 **6️⃣ Economic Value Score**:
-Métrica desarrollada: `EVS = (avg_purchase_value × purchase_frequency) + (membership_years × 100)`
+Métrica desarrollada: `EVS = (sales_percentile * weight_sales) + (value_percentile * weight_value) + (freq_percentile * weight_freq)`
 
 - Percentil 75+: HIGH_VALUE
 - Percentil 25-75: MEDIUM_VALUE
@@ -1882,7 +1882,7 @@ jupyter lab
 - Análisis exploratorio exhaustivo
 - Issues principales de análisis
 - Visualizaciones interactivas con Plotly
-- Pruebas estadísticas (ANOVA, Chi-squared)
+- Pruebas estadísticas (ANOVA, Correlation)
 - Segmentación con K-Means
 
 #### 3. **Data_Scientist.ipynb**
