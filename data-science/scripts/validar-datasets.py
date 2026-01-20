@@ -2,9 +2,9 @@ import pandas as pd
 
 
 # Carga de datasets
-df_raw = pd.read_csv('data-science/data/Grocery_Customer_Churn_Data_Augmented.csv')
-df_analyst = pd.read_csv('data-science/data/dataset_analyst_by_customer.csv')
-df_ml = pd.read_csv('data-science/data/customer_dataset_for_ml.csv')
+df_raw = pd.read_csv('data-science/data/interim/Grocery_Customer_Churn_Data_Augmented.csv')
+df_analyst = pd.read_csv('data-science/data/final/dataset_analyst_by_customer.csv')
+df_ml = pd.read_csv('data-science/data/final/customer_dataset_for_ml.csv')
 
 print("--- Revision de datasets ---")
 

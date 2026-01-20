@@ -3,7 +3,7 @@ import numpy as np
 import uuid
 
 # Cargamos el dataset original (crudo, no hay limpieza previa)
-df_original = pd.read_csv("data-science/data/Grocery_Customer_Churn_Data.csv")
+df_original = pd.read_csv("data-science/data/raw/Grocery_Customer_Churn_Data.csv")
 
 
 def generar_datos_sinteticos(df, objetivo_clientes=5000):
