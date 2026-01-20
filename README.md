@@ -112,7 +112,7 @@ curl -X POST http://localhost:8080/api/v1/predictions \
     "marital_status": "MARRIED",
     "number_of_children": 2,
     "income_bracket": "MEDIUM",
-    "education_level": "BACHELORS",
+    "education_level": "BACHELOR_S",
     "occupation": "EMPLOYED",
     "loyalty_program": true,
     "promo_flag": false,
