@@ -10,7 +10,6 @@ spring:
     hikari:
       connection-timeout: 30000
       initialization-fail-timeout: 0
-
   jpa:
     hibernate:
       ddl-auto: none
@@ -22,5 +21,18 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    customer: ${SPRING_CUSTOMER_MAIL}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 ml-service:
   url: ${ML_SERVICE_URL:http://localhost:8000}
