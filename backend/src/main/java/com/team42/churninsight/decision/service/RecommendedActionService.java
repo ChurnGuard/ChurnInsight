@@ -24,7 +24,7 @@ public class RecommendedActionService {
             Set<FlagType> riskFlag,
             ProfileType profileType) {
 
-        String recommendedAction= decisionEngine.getRecommendation(new DecisionRequest(probabilityChurn,valueCustomer,riskFlag,profileType))
+        String recommendedAction= decisionEngine.getRecommendation(new DecisionRequest(probabilityChurn,valueCustomer,riskFlag,profileType));
 
         if(recommendedAction == null || recommendedAction.isEmpty()){
             recommendedAction = "Sin acción recomendada";
