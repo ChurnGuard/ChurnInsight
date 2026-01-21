@@ -1,14 +1,19 @@
 package com.team42.churninsight.decision.client;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-
 @Component
+@ConditionalOnExpression(
+        "!'${spring.mail.username:}'.isEmpty() && " +
+        "!'${spring.mail.password:}'.isEmpty() && " +
+        "!'${spring.mail.customer:}'.isEmpty()"
+)
 public class EmailNotificationListener {
 
     private final JavaMailSender mailSender;
@@ -26,7 +31,6 @@ public class EmailNotificationListener {
     }
 
     @EventListener
-    @Async
     public void handleRecommendation(RecommendationEvent event) {
 
         if(event.actionCode() == null) {
