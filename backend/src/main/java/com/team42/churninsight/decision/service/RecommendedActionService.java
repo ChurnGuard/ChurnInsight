@@ -32,7 +32,7 @@ public class RecommendedActionService {
                 probabilityChurn, valueCustomer, riskFlag, profileType
         );
 
-        String action = decisionEngine.getRecommendation(request);
+        String action = decisionEngine.getRecommendationCode(request);
 
         if(action != null) {
             eventPublisher.publishEvent(new RecommendationEvent(action, request));

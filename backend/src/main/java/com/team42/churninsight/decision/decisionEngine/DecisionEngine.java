@@ -16,6 +16,14 @@ public final class DecisionEngine {
                 .orElse(null);
     }
 
+    public String getRecommendationCode(DecisionRequest request) {
+        return decisionRuleList().stream()
+                .filter(r -> r.applies(request))
+                .map(DecisionRule::getActionCode)
+                .findFirst()
+                .orElse(null);
+    }
+
     private static List<DecisionRule> decisionRuleList() {
         return  List.of(
                 new CaseEssentialModerateBuyer.PromoAbuse(),

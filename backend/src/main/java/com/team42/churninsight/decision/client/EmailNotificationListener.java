@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -30,10 +29,10 @@ public class EmailNotificationListener {
     @Async
     public void handleRecommendation(RecommendationEvent event) {
 
-        if(event.action() == null) {
+        if(event.actionCode() == null) {
             return;
         }
-        EmailContent content = templateProvider.getTemplate(event.action());
+        EmailContent content = templateProvider.getTemplate(event.actionCode());
 
         if(content == null) {
             System.out.println("No hay un template de email para esta opción.");
