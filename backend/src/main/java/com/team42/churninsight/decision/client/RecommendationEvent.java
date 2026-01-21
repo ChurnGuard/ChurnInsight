@@ -1,9 +1,9 @@
 package com.team42.churninsight.decision.client;
 
-import com.team42.churninsight.decision.decisionEngine.DecisionRequest;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public record RecommendationEvent(
         String actionCode,
-        DecisionRequest request
+        AtomicBoolean emailSent
 ) {
 }

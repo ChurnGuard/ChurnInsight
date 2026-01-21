@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class RecommendedActionService {
@@ -33,12 +34,18 @@ public class RecommendedActionService {
         );
 
         String actionCode = decisionEngine.getRecommendationCode(request);
+        String actionDescription = decisionEngine.getRecommendation(request);
+
+        AtomicBoolean emailWasSent = new AtomicBoolean(false);
 
         if(actionCode != null) {
-            eventPublisher.publishEvent(new RecommendationEvent(actionCode, request));
+            eventPublisher.publishEvent(new RecommendationEvent(actionCode, emailWasSent));
         }
 
-        return decisionEngine.getRecommendation(request);
+        if(emailWasSent.get()) {
+            return actionDescription + ". CORREO ENVIADO.";
+        }
+        return actionDescription;
     }
 
 }
