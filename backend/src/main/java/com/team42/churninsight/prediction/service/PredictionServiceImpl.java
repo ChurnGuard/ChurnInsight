@@ -59,6 +59,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -115,8 +116,15 @@ public class PredictionServiceImpl implements PredictionService {
         // 5) Identificar accion recomendada
         String recomendation = recommendedActionService.getRecommendation(probability.doubleValue(), valueCustomer,flags,profileType);
 
-        //crea el customer y lo persiste para crear el id (antes debería chequear si ya existe buscando por externalId)
-        Customer customerEntity = Customer.create(request.customerId(),priorityScore,valueCustomer, economicValueScore,profileType);
+        //crea el customer y valida si existe. Dependiendo del caso lo crea o lo actualiza.
+        Optional<Customer> customerOptional = customerRepository.findByExternalId(request.customerId());
+        Customer customerEntity;
+        if (customerOptional.isEmpty()){
+            customerEntity = Customer.create(request.customerId(),priorityScore,valueCustomer, economicValueScore,profileType);
+        }else {
+            customerEntity = customerOptional.get();
+            customerEntity.update(priorityScore,valueCustomer,economicValueScore,profileType);
+        }
         customerRepository.save(customerEntity);
 
         //crea la prediccion
