@@ -8,5 +8,6 @@ import java.math.BigDecimal;
 public record CriticalCustomerResponse(
         @JsonProperty("customer_id") String customerId,
         @JsonProperty("economic_value") ValueCustomer economicValue,
-        @JsonProperty("priority_score") BigDecimal priorityScore
+        @JsonProperty("priority_score") BigDecimal priorityScore,
+        @JsonProperty("recommended_action") String recommendedAction
 ) {}
