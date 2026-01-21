@@ -19,6 +19,11 @@ public class CaseHighValueDiscountOnline {
         public String getAction() {
             return "Migración a suscripción premium con descuento fijo mensual";
         }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_VALUE_DISCOUNT_ONLINE_PROMO_ABUSE";
+        }
     }
 
     public static class NoRisk implements DecisionRule {
@@ -32,6 +37,11 @@ public class CaseHighValueDiscountOnline {
         @Override
         public String getAction() {
             return "Early access online + envío gratuito permanente + recomendaciones IA";
+        }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_VALUE_DISCOUNT_ONLINE_NO_RISK";
         }
     }
 }

@@ -19,6 +19,11 @@ public class CaseEssentialModerateBuyer {
         public String getAction() {
             return "Plan de ahorro programado + recordatorios de reabastecimiento";
         }
+
+        @Override
+        public String getActionCode() {
+            return "ESSENTIAL_MODERATE_BUYER_PROMO_ABUSE";
+        }
     }
 
     public static class NoRisk implements DecisionRule {
@@ -32,6 +37,11 @@ public class CaseEssentialModerateBuyer {
         @Override
         public String getAction() {
             return "Mantenimiento suave + newsletter mensual + descuentos estacionales";
+        }
+
+        @Override
+        public String getActionCode() {
+            return "ESSENTIAL_MODERATE_BUYER_NO_RISK";
         }
     }
 }

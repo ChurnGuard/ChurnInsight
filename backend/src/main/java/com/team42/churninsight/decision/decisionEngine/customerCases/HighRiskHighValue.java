@@ -20,6 +20,11 @@ public class HighRiskHighValue {
         public String getAction() {
             return "Llamada urgente + beneficio exclusivo + gestor de cuenta dedicado";
         }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_HIGH_VALUE_INACTIVITY_RISK";
+        }
     }
 
     public static class FinancialRisk implements DecisionRule {
@@ -35,6 +40,11 @@ public class HighRiskHighValue {
         public String getAction() {
             return "Reunión con gestor + plan de valor personalizado + descuento estratégico temporal";
         }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_HIGH_VALUE_FINANCIAL_RISK";
+        }
     }
 
     public static class PromoAbuse implements DecisionRule {
@@ -49,6 +59,11 @@ public class HighRiskHighValue {
         @Override
         public String getAction() {
             return "Llamada de retención + migración a programa de fidelización premium sin descuentos";
+        }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_HIGH_VALUE_PROMO_ABUSE";
         }
     }
 }
