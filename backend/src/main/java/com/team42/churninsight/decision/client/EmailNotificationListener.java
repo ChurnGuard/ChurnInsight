@@ -3,6 +3,7 @@ package com.team42.churninsight.decision.client;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailNotificationListener {
 
-    private final JavaMailSenderImpl mailSender;
+    private final JavaMailSender mailSender;
     private final EmailTemplateProvider templateProvider;
 
     @Value("${spring.mail.username}")
@@ -20,7 +21,7 @@ public class EmailNotificationListener {
     @Value("${spring.mail.customer}")
     private String customerMail;
 
-    public EmailNotificationListener(JavaMailSenderImpl mailSender, EmailTemplateProvider templateProvider) {
+    public EmailNotificationListener(JavaMailSender mailSender, EmailTemplateProvider templateProvider) {
         this.mailSender = mailSender;
         this.templateProvider = templateProvider;
     }
