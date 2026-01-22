@@ -13,8 +13,8 @@ const PredictionPage = () => {
         {/* Header */}
         <Header />
 
-        {/* Área de Contenido */}
-        <main className="flex-1 p-8 overflow-auto">
+        {/* Área de Contenido - Sin padding para que el formulario use todo el espacio */}
+        <main className="flex-1 overflow-hidden">
           <PredictionForm />
         </main>
       </div>
