@@ -1,11 +1,15 @@
 import { LayoutDashboard, Users, FileText, Activity } from 'lucide-react'
 
-const Sidebar = () => {
+interface SidebarProps {
+  currentPage?: 'tablero' | 'predicciones' | 'clientes' | 'agentes'
+}
+
+const Sidebar = ({ currentPage = 'tablero' }: SidebarProps) => {
   const navItems = [
-    { icon: LayoutDashboard, label: 'Tablero', active: true },
-    { icon: Activity, label: 'Predicciones', active: false },
-    { icon: Users, label: 'Clientes', active: false },
-    { icon: FileText, label: 'Reportes', active: false },
+    { icon: LayoutDashboard, label: 'Tablero', page: 'tablero' as const, href: '#/' },
+    { icon: Activity, label: 'Predicciones', page: 'predicciones' as const, href: '#/predicciones' },
+    { icon: Users, label: 'Clientes', page: 'clientes' as const, href: '#/clientes' },
+    { icon: FileText, label: 'Agentes', page: 'agentes' as const, href: '#/agentes' },
   ]
 
   return (
@@ -26,9 +30,9 @@ const Sidebar = () => {
           {navItems.map((item) => (
             <li key={item.label}>
               <a
-                href="#"
+                href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                  item.active
+                  currentPage === item.page
                     ? 'bg-slate-800 text-white'
                     : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
                 }`}

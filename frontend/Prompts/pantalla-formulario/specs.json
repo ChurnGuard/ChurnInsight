@@ -1,0 +1,42 @@
+{
+  "screen_id": "P2-CLIENT_LIST",
+  "name": "Lista de Clientes",
+  "visual_identity": {
+    "background": "Slate-950 (#020617)",
+    "surface": "Slate-900 (#0f172a)",
+    "border": "Slate-800 (#1e293b)",
+    "accents": {
+      "success": "Emerald-500 (#10b981)",
+      "danger": "Rose-500 (#f43f5e)",
+      "warning": "Amber-500 (#f59e0b)"
+    }
+  },
+  "layout": "Sidebar lateral izquierdo fijo + Área de contenido con scroll",
+  "components": [
+    {
+      "id": "header_actions",
+      "type": "ActionBar",
+      "elements": [
+        { "type": "SearchInput", "placeholder": "Buscar cliente por nombre o ID..." },
+        { "type": "Button", "label": "Nueva Predicción", "variant": "Primary", "color": "Emerald-500" }
+      ]
+    },
+    {
+      "id": "quick_filters",
+      "type": "FilterGroup",
+      "options": ["Todos", "Riesgo Alto", "Riesgo Medio", "Riesgo Bajo"]
+    },
+    {
+      "id": "client_table",
+      "type": "DataTable",
+      "columns": [
+        { "key": "id", "label": "ID" },
+        { "key": "name", "label": "Nombre" },
+        { "key": "last_transaction", "label": "Última Transacción" },
+        { "key": "risk_score", "label": "Puntaje de Riesgo" },
+        { "key": "actions", "label": "Acciones" }
+      ],
+      "styling": "Zebra rows or hover highlights"
+    }
+  ]
+}
