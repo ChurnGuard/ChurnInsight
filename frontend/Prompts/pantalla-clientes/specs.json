@@ -1,0 +1,41 @@
+{
+  "screen_id": "P4-CLIENT_DETAIL",
+  "name": "Detalle de Cliente e Insights de IA",
+  "visual_identity": {
+    "background": "Slate-950 (#020617)",
+    "surface": "Slate-900 (#0f172a)",
+    "border": "Slate-800 (#1e293b)",
+    "accents": {
+      "high_risk": "Rose-500 (#f43f5e)",
+      "medium_risk": "Amber-500 (#f59e0b)",
+      "low_risk": "Emerald-500 (#10b981)"
+    }
+  },
+  "layout": "Sidebar lateral + Cabecera de perfil + Grid de contenido (2 columnas)",
+  "sections": [
+    {
+      "id": "customer_header",
+      "type": "ProfileHeader",
+      "elements": ["Avatar", "Name", "Customer_ID", "Risk_Badge"]
+    },
+    {
+      "id": "prediction_insights",
+      "type": "AnalysisGrid",
+      "components": [
+        { "id": "risk_gauge", "label": "Puntaje de Riesgo de Abandono", "type": "GaugeChart" },
+        { "id": "feature_importance", "label": "Factores de Impacto (SHAP)", "type": "HorizontalBarChart" }
+      ]
+    },
+    {
+      "id": "data_summary",
+      "type": "DataTabs",
+      "tabs": ["Demografía", "Servicios", "Finanzas"]
+    },
+    {
+      "id": "retention_actions",
+      "type": "ActionCard",
+      "title": "Estrategia de Retención Sugerida",
+      "actions": ["Generar Descuento", "Enviar Notificación", "Llamada de Soporte"]
+    }
+  ]
+}
