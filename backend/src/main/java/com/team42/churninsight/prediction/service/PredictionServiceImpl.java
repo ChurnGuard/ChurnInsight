@@ -231,7 +231,8 @@ public class PredictionServiceImpl implements PredictionService {
                 BigDecimal.valueOf(prediction.getProbabilityChurn()),
                 prediction.getChurn(),
                 flags,
-                prediction.getRecommendedAction()
+                prediction.getRecommendedAction(),
+                prediction.getCreatedAt()
         );
     }
 

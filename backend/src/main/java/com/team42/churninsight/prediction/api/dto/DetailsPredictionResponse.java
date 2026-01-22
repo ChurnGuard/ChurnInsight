@@ -8,6 +8,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public record DetailsPredictionResponse(
@@ -31,6 +32,10 @@ public record DetailsPredictionResponse(
 
         @NotNull
         @JsonProperty("recommended_action")
-        String recommendedAction
+        String recommendedAction,
+
+        @NotNull
+        @JsonProperty("prediction_date")
+        LocalDateTime predictionDate
 ) {
 }
