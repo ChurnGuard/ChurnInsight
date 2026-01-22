@@ -38,11 +38,13 @@
 
 package com.team42.churninsight.prediction.service;
 import com.team42.churninsight.common.exception.InvalidPredictionRequestException;
+import com.team42.churninsight.common.exception.NotFoundException;
 import com.team42.churninsight.customer.entity.Customer;
 import com.team42.churninsight.customer.repository.CustomerRepository;
 import com.team42.churninsight.decision.service.RecommendedActionService;
 import com.team42.churninsight.economic.EconomicService;
 import com.team42.churninsight.prediction.Prediction;
+import com.team42.churninsight.prediction.api.dto.DetailsPredictionResponse;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
 import com.team42.churninsight.prediction.api.dto.PredictionResponse;
 import com.team42.churninsight.prediction.client.ChurnModelClient;
@@ -212,5 +214,26 @@ public class PredictionServiceImpl implements PredictionService {
         return raw.setScale(SCALE, RoundingMode.HALF_UP);
     }
 
+    @Override
+    public DetailsPredictionResponse getPrediction (Long id){
+        Optional<Prediction> predictionOptional = predictionRepository.findById(id);
+        if (predictionOptional.isEmpty()){
+            throw new NotFoundException("Prediction not found with id: " + id);
+        }
+        Prediction prediction = predictionOptional.get();
+        Set<FlagType> flags = prediction.getRiskFlags()
+                .stream()
+                .map(RiskFlag::getFlagType)
+                .collect(Collectors.toSet());
+
+        return new DetailsPredictionResponse(
+                prediction.getCustomer().getExternalId(),
+                BigDecimal.valueOf(prediction.getProbabilityChurn()),
+                prediction.getChurn(),
+                flags,
+                prediction.getRecommendedAction(),
+                prediction.getCreatedAt()
+        );
+    }
 
 }
