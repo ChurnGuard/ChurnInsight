@@ -1,6 +1,7 @@
 import Dashboard from './pages/Dashboard'
 import PredictionPage from './pages/PredictionPage'
 import CustomerListPage from './pages/CustomerListPage'
+import AgentsPage from './pages/AgentsPage'
 
 function App() {
   // Simple router basado en hash
@@ -12,6 +13,10 @@ function App() {
   
   if (path === '/clientes') {
     return <CustomerListPage />
+  }
+  
+  if (path === '/agentes') {
+    return <AgentsPage />
   }
   
   return <Dashboard />
