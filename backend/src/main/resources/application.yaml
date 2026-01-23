@@ -35,4 +35,4 @@ spring:
             enable: true
 
 ml-service:
-  url: ${ML_SERVICE_URL:http://localhost:8000}
+  url: ${ML_SERVICE_URL:http://127.0.0.1:8000}

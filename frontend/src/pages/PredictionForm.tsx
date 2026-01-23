@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react'
+import { predictionService, PredictionResponse } from '../services/predictionService'
 
 interface PredictionResult {
   riesgo: number
   puntajePrioridad: number
   clienteAltoValor: boolean
   perfil: string
-  factores: Array<{ nombre: string; impacto: number }>
+  factores: string[]
   accionRecomendada: string
 }
 
@@ -57,25 +58,69 @@ const PredictionForm = () => {
   })
 
   const [predictionResult, setPredictionResult] = useState<PredictionResult | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
+    setError(null)
     
-    // Simulación de resultados (reemplazar con llamada API real)
-    const mockResult: PredictionResult = {
-      riesgo: 72,
-      puntajePrioridad: 84,
-      clienteAltoValor: true,
-      perfil: 'Dependiente de Promociones',
-      factores: [
-        { nombre: 'Riesgo por Inactividad', impacto: 32 },
-        { nombre: 'Abuso de Promociones', impacto: 15 }
-      ],
-      accionRecomendada: 'Acción Sugerida: Llamada de retención + beneficio de lealtad'
+    try {
+      // Convertir formData a tipos correctos
+      const requestData = {
+        customer_id: formData.customer_id,
+        transaction_id: formData.transaction_id,
+        transaction_date: formData.transaction_date,
+        age: parseInt(formData.age),
+        gender: formData.gender,
+        marital_status: formData.marital_status,
+        number_of_children: parseInt(formData.number_of_children) || 0,
+        income_bracket: formData.income_bracket,
+        education_level: formData.education_level,
+        occupation: formData.occupation,
+        loyalty_program: formData.loyalty_program === 'true',
+        promo_flag: formData.promo_flag === 'true',
+        membership_years: parseInt(formData.membership_years) || 0,
+        last_purchase_date: formData.last_purchase_date,
+        product_category: formData.product_category,
+        quantity: parseInt(formData.quantity) || 1,
+        unit_price: parseFloat(formData.unit_price) || 0,
+        promotion_type: formData.promotion_type || 'NONE',
+        days_since_last_purchase: parseInt(formData.days_since_last_purchase) || 0,
+        total_purchases: parseInt(formData.total_purchases) || 0,
+        total_transactions: parseInt(formData.total_transactions) || 0,
+        total_items_purchased: parseInt(formData.total_items_purchased) || 0,
+        total_sales: parseFloat(formData.total_sales) || 0,
+        avg_purchase_value: parseFloat(formData.avg_purchase_value) || 0,
+        purchase_frequency: parseFloat(formData.purchase_frequency) || 0,
+        avg_discount_used: parseFloat(formData.avg_discount_used) || 0,
+        promotion_effectiveness: parseFloat(formData.promotion_effectiveness) || 0,
+        online_purchases: parseInt(formData.online_purchases) || 0,
+        in_store_purchases: parseInt(formData.in_store_purchases) || 0,
+        online_ratio: parseFloat(formData.online_ratio) || 0
+      }
+
+      const response: PredictionResponse = await predictionService.predict(requestData)
+      
+      // Transformar respuesta del backend al formato del UI
+      const result: PredictionResult = {
+        riesgo: Math.round(response.probability_churn * 100),
+        puntajePrioridad: Math.round(response.priority_score * 100),
+        clienteAltoValor: response.economic_value === 'HIGH_VALUE_CUSTOMER',
+        perfil: response.customer_profile,
+        factores: response.risk_flags,
+        accionRecomendada: response.recommended_action
+      }
+      
+      setPredictionResult(result)
+      setIsPanelOpen(true)
+    } catch (err) {
+      console.error('Error al generar predicción:', err)
+      setError(err instanceof Error ? err.message : 'Error al procesar la predicción')
+    } finally {
+      setLoading(false)
     }
-    
-    setPredictionResult(mockResult)
-    setIsPanelOpen(true)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -87,6 +132,7 @@ const PredictionForm = () => {
 
   const resetPrediction = () => {
     setPredictionResult(null)
+    setError(null)
     setIsPanelOpen(false)
     setFormData({
       customer_id: '',
@@ -663,14 +709,32 @@ const PredictionForm = () => {
               </div>
             </div>
 
+            {/* Mensaje de Error */}
+            {error && (
+              <div className="flex items-center gap-3 bg-red-500/10 border border-red-500 rounded-lg p-4 text-red-400">
+                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <p>{error}</p>
+              </div>
+            )}
+
             {/* Botón de Submit */}
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+                disabled={loading}
+                className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white font-semibold px-8 py-3 rounded-xl transition-colors"
               >
-                <Sparkles className="w-5 h-5" />
-                Generar Predicción
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Procesando...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5" />
+                    Generar Predicción
+                  </>
+                )}
               </button>
             </div>
           </form>
@@ -783,23 +847,19 @@ const PredictionForm = () => {
             <div className="bg-slate-900 rounded-lg p-6 border border-slate-800">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-rose-500" />
-                <h3 className="text-sm font-semibold text-slate-100">Factores de Impacto</h3>
+                <h3 className="text-sm font-semibold text-slate-100">Factores de Riesgo</h3>
               </div>
-              <div className="space-y-3">
-                {predictionResult.factores.map((factor, index) => (
-                  <div key={index}>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs text-slate-300">{factor.nombre}</span>
-                      <span className="text-xs font-semibold text-rose-400">+{factor.impacto}%</span>
+              <div className="space-y-2">
+                {predictionResult.factores.length > 0 ? (
+                  predictionResult.factores.map((factor, index) => (
+                    <div key={index} className="flex items-center gap-2 text-xs text-slate-300 bg-slate-800 rounded-lg p-3">
+                      <div className="w-2 h-2 rounded-full bg-rose-500"></div>
+                      <span>{factor.replace(/_/g, ' ')}</span>
                     </div>
-                    <div className="w-full bg-slate-800 rounded-full h-1.5">
-                      <div
-                        className="bg-rose-500 h-1.5 rounded-full transition-all"
-                        style={{ width: `${Math.min(factor.impacto * 2.5, 100)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-400">No se detectaron factores de riesgo significativos</p>
+                )}
               </div>
             </div>
 
