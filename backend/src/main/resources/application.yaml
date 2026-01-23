@@ -3,7 +3,7 @@ spring:
     name: churninsight
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/churninsight}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/churninsight}?useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${SPRING_DATASOURCE_USERNAME:churnuser}
     password: ${SPRING_DATASOURCE_PASSWORD:churnpass}
@@ -13,7 +13,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: true  # Muestra las queries SQL en consola
+    show-sql: true # Muestra las queries SQL en consola
     properties:
       hibernate:
         format_sql: true

@@ -1,64 +1,36 @@
+import { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
 import CriticalCustomerCard from '../components/CriticalCustomerCard'
+import { customerService } from '../services/customerService'
+import { transformCriticalCustomers } from '../utils/customerMapper'
+import { ClienteUI } from '../types/customer.types'
 
 const Dashboard = () => {
-  const clientes = [
-    {
-      nombre: 'Elena',
-      apellido: 'Sorolla',
-      riesgo: 98.4,
-      valorEconomico: 'Cliente de Alto Valor' as const,
-      puntajePrioridad: 96,
-      accionSugerida: 'Campaña de Retención VIP',
-      avatarColor: '#64748b'
-    },
-    {
-      nombre: 'Marcus',
-      apellido: 'Thorne',
-      riesgo: 94.2,
-      valorEconomico: 'Cliente de Valor Medio' as const,
-      puntajePrioridad: 89,
-      accionSugerida: 'Llamada de Fidelización',
-      avatarColor: '#475569'
-    },
-    {
-      nombre: 'Julianna',
-      apellido: 'Reed',
-      riesgo: 91.7,
-      valorEconomico: 'Cliente de Alto Valor' as const,
-      puntajePrioridad: 92,
-      accionSugerida: 'Oferta de Extensión Anual',
-      avatarColor: '#0891b2'
-    },
-    {
-      nombre: 'David',
-      apellido: 'Chen',
-      riesgo: 89.1,
-      valorEconomico: 'Cliente de Valor Medio' as const,
-      puntajePrioridad: 84,
-      accionSugerida: 'Campaña de Retención',
-      avatarColor: '#64748b'
-    },
-    {
-      nombre: 'Sarah',
-      apellido: 'Jenkins',
-      riesgo: 87.5,
-      valorEconomico: 'Cliente de Bajo Valor' as const,
-      puntajePrioridad: 78,
-      accionSugerida: 'Email de Seguimiento',
-      avatarColor: '#475569'
-    },
-    {
-      nombre: 'Robert',
-      apellido: 'Vance',
-      riesgo: 85.0,
-      valorEconomico: 'Cliente de Bajo Valor' as const,
-      puntajePrioridad: 75,
-      accionSugerida: 'Análisis de Comportamiento',
-      avatarColor: '#84cc16'
+  const [clientes, setClientes] = useState<ClienteUI[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Cargar datos del backend al montar el componente
+  useEffect(() => {
+    const fetchCriticalCustomers = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        
+        const data = await customerService.getCriticalCustomers()
+        const transformedData = transformCriticalCustomers(data)
+        setClientes(transformedData)
+      } catch (err) {
+        console.error('Error al cargar clientes críticos:', err)
+        setError('No se pudieron cargar los clientes críticos. Por favor, intente de nuevo.')
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchCriticalCustomers()
+  }, [])
 
   return (
     <div className="flex min-h-screen bg-slate-950">
@@ -82,12 +54,34 @@ const Dashboard = () => {
             </p>
           </div>
 
+          {/* Estados de Carga y Error */}
+          {loading && (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
+              <span className="ml-4 text-slate-400">Cargando clientes críticos...</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="bg-red-500/10 border border-red-500 rounded-lg p-4 text-red-400">
+              {error}
+            </div>
+          )}
+
           {/* Grid de Clientes Críticos */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {clientes.map((cliente, index) => (
-              <CriticalCustomerCard key={index} {...cliente} />
-            ))}
-          </div>
+          {!loading && !error && (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {clientes.length > 0 ? (
+                clientes.map((cliente, index) => (
+                  <CriticalCustomerCard key={index} {...cliente} />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12 text-slate-400">
+                  No hay clientes críticos en este momento.
+                </div>
+              )}
+            </div>
+          )}
         </main>
       </div>
     </div>
