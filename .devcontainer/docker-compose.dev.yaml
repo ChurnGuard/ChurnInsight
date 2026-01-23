@@ -4,13 +4,14 @@ services:
     volumes:
       - .:/workspace:cached
     command: sleep infinity
-    network_mode: service:backend
     depends_on:
       - backend
       - ml-service
       - db
+    ports:
+      - "3000:3000"
     environment:
-      - ML_SERVICE_URL=http://localhost:8000
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/churninsight
+      - ML_SERVICE_URL=http://ml-service:8000
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/churninsight
       - SPRING_DATASOURCE_USERNAME=churnuser
       - SPRING_DATASOURCE_PASSWORD=churnpass
