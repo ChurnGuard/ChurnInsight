@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react'
+import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle, Plus } from 'lucide-react'
 import { predictionService, PredictionResponse } from '../services/predictionService'
 
 interface PredictionResult {
@@ -894,8 +894,8 @@ const PredictionForm = () => {
                 onClick={resetPrediction}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 border border-slate-800 text-slate-300 rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium"
               >
-                <Edit2 className="w-4 h-4" />
-                Editar Formulario
+                <Plus className="w-4 h-4" />
+                Nueva Predicción
               </button>
               <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm font-medium">
                 <Share2 className="w-4 h-4" />
