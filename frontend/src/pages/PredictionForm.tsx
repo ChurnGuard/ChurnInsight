@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react'
+import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react'
 import { predictionService, PredictionResponse } from '../services/predictionService'
 
 interface PredictionResult {
@@ -9,6 +9,7 @@ interface PredictionResult {
   perfil: string
   factores: string[]
   accionRecomendada: string
+  churn: boolean
 }
 
 const PredictionForm = () => {
@@ -110,7 +111,8 @@ const PredictionForm = () => {
         clienteAltoValor: response.economic_value === 'HIGH_VALUE_CUSTOMER',
         perfil: response.customer_profile,
         factores: response.risk_flags,
-        accionRecomendada: response.recommended_action
+        accionRecomendada: response.recommended_action,
+        churn: response.churn
       }
       
       setPredictionResult(result)
@@ -754,27 +756,27 @@ const PredictionForm = () => {
 
       {/* Panel Derecho - Resultados */}
       <div 
-        className={`bg-slate-950 overflow-y-auto px-6 py-8 border-l border-slate-800 transition-all duration-300 ${
-          isPanelOpen ? 'w-[380px]' : 'w-0 px-0'
+        className={`bg-slate-950 border-l border-slate-800 transition-all duration-300 ${
+          isPanelOpen ? 'w-[380px]' : 'w-0'
         }`}
       >
-        <div className={isPanelOpen ? 'opacity-100' : 'opacity-0'}>
-        {!predictionResult ? (
-          // Empty State
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mb-4 border border-slate-800">
-              <TrendingUp className="w-10 h-10 text-slate-600" />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-300 mb-2">Análisis de Riesgo IA</h3>
-            <p className="text-slate-500 text-sm max-w-xs">
-              Completa el formulario para ver el análisis de riesgo de abandono
-            </p>
-          </div>
-        ) : (
-          // Resultados
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-slate-100 mb-1">Resultados</h2>
+        <div className={`h-full overflow-y-auto ${isPanelOpen ? 'px-6 py-8' : ''}`}>
+          {!predictionResult ? (
+              // Empty State
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mb-4 border border-slate-800">
+                  <TrendingUp className="w-10 h-10 text-slate-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-slate-300 mb-2">Análisis de Riesgo IA</h3>
+                <p className="text-slate-500 text-sm max-w-xs">
+                  Completa el formulario para ver el análisis de riesgo de abandono
+                </p>
+              </div>
+            ) : (
+              // Resultados
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-slate-100 mb-1">Resultados</h2>
               <p className="text-sm text-slate-400">
                 Los resultados se basan en el modelo ML-v4 analizando el perfil del cliente proporcionado.
               </p>
@@ -817,11 +819,18 @@ const PredictionForm = () => {
                   </div>
                 </div>
 
-                {/* Badge Riesgo Crítico */}
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 border border-rose-500/20 rounded-full mb-3">
-                  <div className="w-2 h-2 bg-rose-500 rounded-full"></div>
-                  <span className="text-xs font-semibold text-rose-500 uppercase">Riesgo Crítico</span>
-                </div>
+                {/* Badge Churn - Dinámico */}
+                {predictionResult.churn ? (
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 border border-rose-500/20 rounded-full mb-3">
+                    <AlertTriangle className="w-4 h-4 text-rose-500" />
+                    <span className="text-xs font-semibold text-rose-500 uppercase">Cliente con Riesgo de Abandono</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-3">
+                    <CheckCircle className="w-4 h-4 text-emerald-500" />
+                    <span className="text-xs font-semibold text-emerald-500 uppercase">Cliente Estable</span>
+                  </div>
+                )}
 
                 <div className="text-sm text-slate-300 mb-4">
                   Puntaje de Prioridad: <span className="font-semibold text-slate-100">{predictionResult.puntajePrioridad}%</span>
