@@ -38,11 +38,13 @@
 
 package com.team42.churninsight.prediction.service;
 import com.team42.churninsight.common.exception.InvalidPredictionRequestException;
+import com.team42.churninsight.common.exception.NotFoundException;
 import com.team42.churninsight.customer.entity.Customer;
 import com.team42.churninsight.customer.repository.CustomerRepository;
 import com.team42.churninsight.decision.service.RecommendedActionService;
 import com.team42.churninsight.economic.EconomicService;
 import com.team42.churninsight.prediction.Prediction;
+import com.team42.churninsight.prediction.api.dto.DetailsPredictionResponse;
 import com.team42.churninsight.prediction.api.dto.PredictionRequest;
 import com.team42.churninsight.prediction.api.dto.PredictionResponse;
 import com.team42.churninsight.prediction.client.ChurnModelClient;
@@ -59,6 +61,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -115,8 +118,15 @@ public class PredictionServiceImpl implements PredictionService {
         // 5) Identificar accion recomendada
         String recomendation = recommendedActionService.getRecommendation(probability.doubleValue(), valueCustomer,flags,profileType);
 
-        //crea el customer y lo persiste para crear el id (antes debería chequear si ya existe buscando por externalId)
-        Customer customerEntity = Customer.create(request.customerId(),priorityScore,valueCustomer, economicValueScore,profileType);
+        //crea el customer y valida si existe. Dependiendo del caso lo crea o lo actualiza.
+        Optional<Customer> customerOptional = customerRepository.findByExternalId(request.customerId());
+        Customer customerEntity;
+        if (customerOptional.isEmpty()){
+            customerEntity = Customer.create(request.customerId(),priorityScore,valueCustomer, economicValueScore,profileType);
+        }else {
+            customerEntity = customerOptional.get();
+            customerEntity.update(priorityScore,valueCustomer,economicValueScore,profileType);
+        }
         customerRepository.save(customerEntity);
 
         //crea la prediccion
@@ -204,5 +214,26 @@ public class PredictionServiceImpl implements PredictionService {
         return raw.setScale(SCALE, RoundingMode.HALF_UP);
     }
 
+    @Override
+    public DetailsPredictionResponse getPrediction (Long id){
+        Optional<Prediction> predictionOptional = predictionRepository.findById(id);
+        if (predictionOptional.isEmpty()){
+            throw new NotFoundException("Prediction not found with id: " + id);
+        }
+        Prediction prediction = predictionOptional.get();
+        Set<FlagType> flags = prediction.getRiskFlags()
+                .stream()
+                .map(RiskFlag::getFlagType)
+                .collect(Collectors.toSet());
+
+        return new DetailsPredictionResponse(
+                prediction.getCustomer().getExternalId(),
+                BigDecimal.valueOf(prediction.getProbabilityChurn()),
+                prediction.getChurn(),
+                flags,
+                prediction.getRecommendedAction(),
+                prediction.getCreatedAt()
+        );
+    }
 
 }

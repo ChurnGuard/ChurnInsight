@@ -10,5 +10,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByExternalId(String externalId);
 
-    List<Customer> findAllByOrderByPriorityScoreDesc();
+    List<Customer> findTop5ByOrderByPriorityScoreDesc();
 }

@@ -2,7 +2,7 @@ package com.team42.churninsight.prediction.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum Occupation {
+public enum     Occupation {
     @JsonProperty("Retired") RETIRED,
     @JsonProperty("Unemployed") UNEMPLOYED,
     @JsonProperty("Student") STUDENT,
