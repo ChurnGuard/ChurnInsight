@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CriticalCustomerResponse> getCriticalCustomers() {
-        return repository.findTop5ByOrderByPriorityScoreDesc()
+        return repository.findTop6ByOrderByPriorityScoreDesc()
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -59,8 +59,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CriticalCustomerResponse toResponse(Customer cc) {
         String recommendedAction = predictionRepository.findLastRecommendedActionByCustomer(cc.getId()).orElse(null);
+        Double probabilityChurn = predictionRepository.findLastProbabilityChurnByCustomer(cc.getId()).orElse(null);
         return new CriticalCustomerResponse(
                 cc.getExternalId(),
+                probabilityChurn,
                 cc.getEconomicValue(),
                 cc.getPriorityScore(),
                 recommendedAction

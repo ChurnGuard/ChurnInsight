@@ -15,6 +15,9 @@ public interface PredictionRepository extends JpaRepository<Prediction, Long> {
     @Query(value = "SELECT p.recommended_action FROM predictions p WHERE p.customer_id = :customerId ORDER BY p.prediction_date DESC LIMIT 1", nativeQuery = true)
     Optional<String> findLastRecommendedActionByCustomer(@Param("customerId") Long customerId);
 
+    @Query(value = "SELECT p.churn_probability FROM predictions p WHERE p.customer_id = :customerId ORDER BY p.prediction_date DESC LIMIT 1", nativeQuery = true)
+    Optional<Double> findLastProbabilityChurnByCustomer(@Param("customerId") Long customerId);
+
 
     List<Prediction> findAllByCustomerOrderByCreatedAtDesc(Customer customer);
 }
