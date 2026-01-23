@@ -19,6 +19,11 @@ public class LowRiskHighValue {
         public String getAction() {
             return "Programa VIP automático + acceso anticipado + eventos exclusivos";
         }
+
+        @Override
+        public String getActionCode() {
+            return "LOW_RISK_HIGH_VALUE_NO_FLAG";
+        }
     }
 
     public static class AnyFlag implements DecisionRule {
@@ -34,6 +39,11 @@ public class LowRiskHighValue {
         @Override
         public String getAction() {
             return "Check-in proactivo + beneficio sorpresa + solicitud de feedback";
+        }
+
+        @Override
+        public String getActionCode() {
+            return "LOW_RISK_HIGH_VALUE_ANY_FLAG";
         }
     }
 

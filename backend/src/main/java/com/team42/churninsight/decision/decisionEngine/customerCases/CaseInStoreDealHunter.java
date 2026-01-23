@@ -20,6 +20,11 @@ public class CaseInStoreDealHunter {
         public String getAction() {
             return "Invitación a eventos en tienda + cashback en lugar de descuentos";
         }
+
+        @Override
+        public String getActionCode() {
+            return "IN_STORE_DEAL_HUNTER_HIGH_CHURN_PROMO_ABUSE";
+        }
     }
 
     public static class NoRisk implements DecisionRule {
@@ -33,6 +38,11 @@ public class CaseInStoreDealHunter {
         @Override
         public String getAction() {
             return "Programa de lealtad en tienda + descuentos escalonados por visitas";
+        }
+
+        @Override
+        public String getActionCode() {
+            return "IN_STORE_DEAL_HUNTER_NO_RISK";
         }
     }
 }

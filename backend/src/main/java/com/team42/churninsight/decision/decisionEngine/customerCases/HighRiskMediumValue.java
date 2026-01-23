@@ -20,6 +20,11 @@ public class HighRiskMediumValue {
         public String getAction() {
             return "Email personalizado + cupón de reactivación + recordatorio de beneficios";
         }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_MEDIUM_VALUE_INACTIVITY_RISK";
+        }
     }
 
     public static class FinancialRisk implements DecisionRule {
@@ -35,6 +40,11 @@ public class HighRiskMediumValue {
         public String getAction() {
             return "Email automatizado + oferta de financiamiento/cuotas + productos de entrada";
         }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_MEDIUM_VALUE_FINANCIAL_RISK";
+        }
     }
 
     public static class PromoAbuse implements DecisionRule {
@@ -49,6 +59,11 @@ public class HighRiskMediumValue {
         @Override
         public String getAction() {
             return "Email con programa de puntos + beneficios no monetarios";
+        }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_MEDIUM_VALUE_PROMO_ABUSE";
         }
     }
 }

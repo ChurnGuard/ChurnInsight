@@ -20,6 +20,11 @@ public class HighRiskLowValue {
         public String getAction() {
             return "Email automatizado de reactivación + descuento moderado";
         }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_LOW_VALUE_INACTIVITY_RISK";
+        }
     }
 
     public static class FinancialRisk implements DecisionRule {
@@ -35,6 +40,11 @@ public class HighRiskLowValue {
         public String getAction() {
             return "Email automático con promo o productos económicos + programa de referidos";
         }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_LOW_VALUE_FINANCIAL_RISK";
+        }
     }
 
     public static class PromoAbuse implements DecisionRule {
@@ -49,6 +59,11 @@ public class HighRiskLowValue {
         @Override
         public String getAction() {
             return "Email con educación de producto + descuento único limitado";
+        }
+
+        @Override
+        public String getActionCode() {
+            return "HIGH_RISK_LOW_VALUE_PROMO_ABUSE";
         }
     }
 }
