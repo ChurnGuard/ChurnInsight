@@ -117,6 +117,9 @@ const PredictionForm = () => {
       
       setPredictionResult(result)
       setIsPanelOpen(true)
+      
+      // Scroll hacia arriba para ver los resultados
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
       console.error('Error al generar predicción:', err)
       setError(err instanceof Error ? err.message : 'Error al procesar la predicción')
