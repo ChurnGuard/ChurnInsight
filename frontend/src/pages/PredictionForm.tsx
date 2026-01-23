@@ -13,23 +13,47 @@ interface PredictionResult {
 const PredictionForm = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [formData, setFormData] = useState({
+    // Identificación
+    customer_id: '',
+    transaction_id: '',
+    transaction_date: '',
+    
     // Demografía
-    clientId: '',
-    edad: '',
-    genero: '',
-    pais: '',
+    age: '',
+    gender: '',
+    marital_status: '',
+    number_of_children: '',
+    income_bracket: '',
+    education_level: '',
+    occupation: '',
     
-    // Uso del Servicio
-    nivelSuscripcion: 'Premium',
-    tipoPromocion: 'Sin Promoción',
-    ticketsSoporte: '',
-    horasRegistradas: '',
+    // Membresía
+    loyalty_program: true,
+    promo_flag: true,
+    membership_years: '',
     
-    // Historial Financiero
-    puntajeCredito: '',
-    saldoCuenta: '',
-    salarioEstimado: '',
-    metodoPago: 'Tarjeta de Crédito'
+    // Transacción
+    product_category: '',
+    quantity: '',
+    unit_price: '',
+    promotion_type: '',
+    
+    // Historial de Compras
+    last_purchase_date: '',
+    days_since_last_purchase: '',
+    total_purchases: '',
+    total_transactions: '',
+    total_items_purchased: '',
+    total_sales: '',
+    avg_purchase_value: '',
+    purchase_frequency: '',
+    avg_discount_used: '',
+    promotion_effectiveness: '',
+    
+    // Canal de Compra
+    online_purchases: '',
+    in_store_purchases: '',
+    online_ratio: ''
   })
 
   const [predictionResult, setPredictionResult] = useState<PredictionResult | null>(null)
@@ -64,6 +88,38 @@ const PredictionForm = () => {
   const resetPrediction = () => {
     setPredictionResult(null)
     setIsPanelOpen(false)
+    setFormData({
+      customer_id: '',
+      transaction_id: '',
+      transaction_date: '',
+      age: '',
+      gender: '',
+      marital_status: '',
+      number_of_children: '',
+      income_bracket: '',
+      education_level: '',
+      occupation: '',
+      loyalty_program: true,
+      promo_flag: true,
+      membership_years: '',
+      product_category: '',
+      quantity: '',
+      unit_price: '',
+      promotion_type: '',
+      last_purchase_date: '',
+      days_since_last_purchase: '',
+      total_purchases: '',
+      total_transactions: '',
+      total_items_purchased: '',
+      total_sales: '',
+      avg_purchase_value: '',
+      purchase_frequency: '',
+      avg_discount_used: '',
+      promotion_effectiveness: '',
+      online_purchases: '',
+      in_store_purchases: '',
+      online_ratio: ''
+    })
   }
 
   const togglePanel = () => {
@@ -85,227 +141,524 @@ const PredictionForm = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Sección: Demografía */}
+            {/* Sección: Identificación */}
             <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
                 <User className="w-5 h-5 text-emerald-500" />
+                <h2 className="text-lg font-semibold text-white">Identificación</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    ID de Cliente <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="customer_id"
+                    value={formData.customer_id}
+                    onChange={handleChange}
+                    placeholder="C1000"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    ID de Transacción <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="transaction_id"
+                    value={formData.transaction_id}
+                    onChange={handleChange}
+                    placeholder="T1000"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Fecha de Transacción <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="transaction_date"
+                    value={formData.transaction_date}
+                    onChange={handleChange}
+                    placeholder="01/07/2025"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Sección: Demografía */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <User className="w-5 h-5 text-blue-500" />
                 <h2 className="text-lg font-semibold text-white">Demografía</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* ID de Cliente */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    ID de Cliente
-                  </label>
-                  <input
-                    type="text"
-                    name="clientId"
-                    value={formData.clientId}
-                    onChange={handleChange}
-                    placeholder="CID-882910-X"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-
-                {/* Edad */}
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Edad
+                    Edad <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="number"
-                    name="edad"
-                    value={formData.edad}
+                    name="age"
+                    value={formData.age}
                     onChange={handleChange}
-                    placeholder="ej. 34"
+                    placeholder="33"
+                    required
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
-                {/* Género */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Género
+                    Género <span className="text-rose-500">*</span>
                   </label>
                   <select
-                    name="genero"
-                    value={formData.genero}
+                    name="gender"
+                    value={formData.gender}
                     onChange={handleChange}
+                    required
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
-                    <option value="">Seleccionar Género</option>
+                    <option value="">Seleccionar</option>
                     <option value="Male">Masculino</option>
                     <option value="Female">Femenino</option>
                     <option value="Other">Otro</option>
                   </select>
                 </div>
 
-                {/* País */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    País
+                    Estado Civil <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    name="marital_status"
+                    value={formData.marital_status}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="Single">Soltero/a</option>
+                    <option value="Married">Casado/a</option>
+                    <option value="Divorced">Divorciado/a</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Número de Hijos <span className="text-rose-500">*</span>
                   </label>
                   <input
-                    type="text"
-                    name="pais"
-                    value={formData.pais}
+                    type="number"
+                    name="number_of_children"
+                    value={formData.number_of_children}
                     onChange={handleChange}
-                    placeholder="Ingrese país"
+                    placeholder="0"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Nivel de Ingresos <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    name="income_bracket"
+                    value={formData.income_bracket}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="Low">Bajo</option>
+                    <option value="Medium">Medio</option>
+                    <option value="High">Alto</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Nivel de Educación <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    name="education_level"
+                    value={formData.education_level}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="High_School">Secundaria</option>
+                    <option value="Bachelor_s">Licenciatura</option>
+                    <option value="Master_s">Maestría</option>
+                    <option value="PhD">Doctorado</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Ocupación <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    name="occupation"
+                    value={formData.occupation}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="Employed">Empleado</option>
+                    <option value="Self-Employed">Autónomo</option>
+                    <option value="Unemployed">Desempleado</option>
+                    <option value="Student">Estudiante</option>
+                    <option value="Retired">Jubilado</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Años de Membresía <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="membership_years"
+                    value={formData.membership_years}
+                    onChange={handleChange}
+                    placeholder="1"
+                    required
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div className="flex items-center gap-3 bg-slate-950 rounded-lg px-4 py-3 border border-slate-800">
+                  <input
+                    type="checkbox"
+                    name="loyalty_program"
+                    checked={formData.loyalty_program}
+                    onChange={(e) => setFormData({ ...formData, loyalty_program: e.target.checked })}
+                    className="w-5 h-5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
+                  />
+                  <label className="text-sm font-medium text-white">Programa de Lealtad</label>
+                </div>
+
+                <div className="flex items-center gap-3 bg-slate-950 rounded-lg px-4 py-3 border border-slate-800">
+                  <input
+                    type="checkbox"
+                    name="promo_flag"
+                    checked={formData.promo_flag}
+                    onChange={(e) => setFormData({ ...formData, promo_flag: e.target.checked })}
+                    className="w-5 h-5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
+                  />
+                  <label className="text-sm font-medium text-white">Recibe Promociones</label>
+                </div>
+              </div>
             </div>
 
-            {/* Sección: Uso del Servicio */}
+            {/* Sección: Transacción */}
             <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
                 <Briefcase className="w-5 h-5 text-amber-500" />
-                <h2 className="text-lg font-semibold text-white">Uso del Servicio</h2>
+                <h2 className="text-lg font-semibold text-white">Transacción Actual</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Nivel de Suscripción */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Nivel de Suscripción
+                    Categoría de Producto <span className="text-rose-500">*</span>
                   </label>
                   <select
-                    name="nivelSuscripcion"
-                    value={formData.nivelSuscripcion}
+                    name="product_category"
+                    value={formData.product_category}
                     onChange={handleChange}
+                    required
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
-                    <option value="Basic">Basic</option>
-                    <option value="Premium">Premium</option>
-                    <option value="Enterprise">Enterprise</option>
+                    <option value="">Seleccionar</option>
+                    <option value="Electronics">Electrónicos</option>
+                    <option value="Groceries">Comestibles</option>
+                    <option value="Clothing">Ropa</option>
+                    <option value="Home_Goods">Hogar</option>
+                    <option value="Beauty">Belleza</option>
+                    <option value="Sports">Deportes</option>
+                    <option value="Books">Libros</option>
+                    <option value="Toys">Juguetes</option>
+                    <option value="Home">Casa</option>
                   </select>
                 </div>
 
-                {/* Tipo de Promoción */}
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2 flex items-center gap-2">
-                    Tipo de Promoción
-                    <span className="text-slate-400 text-xs">ⓘ</span>
-                  </label>
-                  <select
-                    name="tipoPromocion"
-                    value={formData.tipoPromocion}
-                    onChange={handleChange}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  >
-                    <option value="Sin Promoción">Sin Promoción</option>
-                    <option value="No_Promotion">No Promotion</option>
-                    <option value="Twenty_Percent_Off">20% Off</option>
-                    <option value="Buy_One_Get_One_Free">BOGO</option>
-                    <option value="Seasonal_Discount">Descuento Estacional</option>
-                  </select>
-                </div>
-
-                {/* Tickets de Soporte */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Tickets de Soporte (Últimos 30 días)
+                    Cantidad <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="number"
-                    name="ticketsSoporte"
-                    value={formData.ticketsSoporte}
+                    name="quantity"
+                    value={formData.quantity}
                     onChange={handleChange}
-                    placeholder="0"
+                    placeholder="1"
+                    required
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
-                {/* Horas Registradas Mensuales */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Horas Registradas Mensuales
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    name="horasRegistradas"
-                    value={formData.horasRegistradas}
-                    onChange={handleChange}
-                    placeholder="0.0"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Sección: Historial Financiero */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-              <div className="flex items-center gap-2 mb-6">
-                <CreditCard className="w-5 h-5 text-rose-500" />
-                <h2 className="text-lg font-semibold text-white">Historial Financiero</h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Puntaje de Crédito */}
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Puntaje de Crédito
-                  </label>
-                  <input
-                    type="number"
-                    name="puntajeCredito"
-                    value={formData.puntajeCredito}
-                    onChange={handleChange}
-                    placeholder="300-850"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-
-                {/* Saldo de Cuenta */}
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Saldo de Cuenta ($)
+                    Precio Unitario <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    name="saldoCuenta"
-                    value={formData.saldoCuenta}
+                    name="unit_price"
+                    value={formData.unit_price}
                     onChange={handleChange}
-                    placeholder="0.00"
+                    placeholder="56.00"
+                    required
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
-                {/* Salario Estimado */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Salario Estimado ($)
+                    Tipo de Promoción <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    name="promotion_type"
+                    value={formData.promotion_type}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="No_Promotion">Sin Promoción</option>
+                    <option value="Twenty_Percent_Off">20% de Descuento</option>
+                    <option value="Buy_One_Get_One_Free">2x1</option>
+                    <option value="Seasonal_Discount">Descuento Estacional</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Sección: Historial de Compras */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <CreditCard className="w-5 h-5 text-rose-500" />
+                <h2 className="text-lg font-semibold text-white">Historial de Compras</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Última Compra <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
-                    name="salarioEstimado"
-                    value={formData.salarioEstimado}
+                    name="last_purchase_date"
+                    value={formData.last_purchase_date}
                     onChange={handleChange}
-                    placeholder="Estimación anual"
+                    placeholder="01/07/2025"
+                    required
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
-                {/* Método de Pago */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Método de Pago
+                    Días desde Última Compra <span className="text-rose-500">*</span>
                   </label>
-                  <select
-                    name="metodoPago"
-                    value={formData.metodoPago}
+                  <input
+                    type="number"
+                    name="days_since_last_purchase"
+                    value={formData.days_since_last_purchase}
                     onChange={handleChange}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  >
-                    <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-                    <option value="Tarjeta de Débito">Tarjeta de Débito</option>
-                    <option value="Transferencia">Transferencia Bancaria</option>
-                    <option value="PayPal">PayPal</option>
-                  </select>
+                    placeholder="3"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Total de Compras <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="total_purchases"
+                    value={formData.total_purchases}
+                    onChange={handleChange}
+                    placeholder="200"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Total de Transacciones <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="total_transactions"
+                    value={formData.total_transactions}
+                    onChange={handleChange}
+                    placeholder="1002"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Artículos Comprados <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="total_items_purchased"
+                    value={formData.total_items_purchased}
+                    onChange={handleChange}
+                    placeholder="400"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Ventas Totales ($) <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="total_sales"
+                    value={formData.total_sales}
+                    onChange={handleChange}
+                    placeholder="1002.00"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Valor Promedio de Compra ($) <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="avg_purchase_value"
+                    value={formData.avg_purchase_value}
+                    onChange={handleChange}
+                    placeholder="2.00"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Frecuencia de Compra <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="purchase_frequency"
+                    value={formData.purchase_frequency}
+                    onChange={handleChange}
+                    placeholder="0"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Descuento Promedio Usado <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="avg_discount_used"
+                    value={formData.avg_discount_used}
+                    onChange={handleChange}
+                    placeholder="1.00"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Efectividad de Promoción <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="promotion_effectiveness"
+                    value={formData.promotion_effectiveness}
+                    onChange={handleChange}
+                    placeholder="0.00"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Compras Online <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="online_purchases"
+                    value={formData.online_purchases}
+                    onChange={handleChange}
+                    placeholder="2"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Compras en Tienda <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="in_store_purchases"
+                    value={formData.in_store_purchases}
+                    onChange={handleChange}
+                    placeholder="1"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Ratio Online <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="online_ratio"
+                    value={formData.online_ratio}
+                    onChange={handleChange}
+                    placeholder="1.00"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
                 </div>
               </div>
             </div>
