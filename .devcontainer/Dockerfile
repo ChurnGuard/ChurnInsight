@@ -22,17 +22,13 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends openjdk-17-jdk maven \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-# Install Python 3.11
+# Install Python (uses system default Python 3.12)
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
-    python3.11 \
-    python3.11-venv \
+    python3 \
+    python3-venv \
     python3-pip \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
-# Set Python 3.11 as default
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
 
 # Set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
