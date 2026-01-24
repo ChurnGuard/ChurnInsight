@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Dashboard from './pages/Dashboard'
 import PredictionPage from './pages/PredictionPage'
-import CustomerListPage from './pages/CustomerListPage'
 import AgentsPage from './pages/AgentsPage'
 
 function App() {
@@ -21,8 +20,6 @@ function App() {
     switch (currentPath) {
       case '/predicciones':
         return <PredictionPage />
-      case '/clientes':
-        return <CustomerListPage />
       case '/agentes':
         return <AgentsPage />
       default:

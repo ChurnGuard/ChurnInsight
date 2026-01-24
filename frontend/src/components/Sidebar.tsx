@@ -1,14 +1,13 @@
-import { LayoutDashboard, Users, FileText, Activity } from 'lucide-react'
+import { LayoutDashboard, FileText, Activity } from 'lucide-react'
 
 interface SidebarProps {
-  currentPage?: 'tablero' | 'predicciones' | 'clientes' | 'agentes'
+  currentPage?: 'tablero' | 'predicciones' | 'agentes'
 }
 
 const Sidebar = ({ currentPage = 'tablero' }: SidebarProps) => {
   const navItems = [
     { icon: LayoutDashboard, label: 'Tablero', page: 'tablero' as const, href: '#/' },
     { icon: Activity, label: 'Predicciones', page: 'predicciones' as const, href: '#/predicciones' },
-    { icon: Users, label: 'Clientes', page: 'clientes' as const, href: '#/clientes' },
     { icon: FileText, label: 'Agentes', page: 'agentes' as const, href: '#/agentes' },
   ]
 

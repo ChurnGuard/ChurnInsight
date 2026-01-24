@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle, Plus } from 'lucide-react'
+import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle, Plus, Calendar } from 'lucide-react'
 import { predictionService, PredictionResponse } from '../services/predictionService'
 
 interface PredictionResult {
@@ -10,6 +10,31 @@ interface PredictionResult {
   factores: string[]
   accionRecomendada: string
   churn: boolean
+  fechaPrediccion: string
+}
+
+// Traducciones de perfiles
+const PROFILE_TRANSLATIONS: Record<string, string> = {
+  'HIGH_VALUE_DISCOUNT_ONLINE': 'Cliente de Alto Valor Online con Descuentos',
+  'IN_STORE_DEAL_HUNTER': 'Cazador de Ofertas en Tienda',
+  'ESSENTIAL_MODERATE_BUYER': 'Comprador Moderado de Productos Esenciales'
+}
+
+// Traducciones de factores de riesgo
+const RISK_FLAG_TRANSLATIONS: Record<string, string> = {
+  'INACTIVITY_RISK': 'Riesgo por Inactividad',
+  'FINANCIAL_RISK': 'Riesgo Financiero',
+  'PROMO_ABUSE': 'Abuso de Promociones'
+}
+
+// Función helper para traducir perfil
+const translateProfile = (profile: string): string => {
+  return PROFILE_TRANSLATIONS[profile] || profile
+}
+
+// Función helper para traducir factor de riesgo
+const translateRiskFlag = (flag: string): string => {
+  return RISK_FLAG_TRANSLATIONS[flag] || flag
 }
 
 const PredictionForm = () => {
@@ -109,10 +134,17 @@ const PredictionForm = () => {
         riesgo: Math.round(response.probability_churn * 100),
         puntajePrioridad: Math.round(response.priority_score * 100),
         clienteAltoValor: response.economic_value === 'HIGH_VALUE_CUSTOMER',
-        perfil: response.customer_profile,
+        perfil: translateProfile(response.customer_profile),
         factores: response.risk_flags,
         accionRecomendada: response.recommended_action,
-        churn: response.churn
+        churn: response.churn,
+        fechaPrediccion: new Date().toLocaleDateString('es-ES', { 
+          day: '2-digit', 
+          month: 'long', 
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
       }
       
       setPredictionResult(result)
@@ -778,17 +810,47 @@ const PredictionForm = () => {
             ) : (
               // Resultados
               <div className="space-y-6">
-                <div className="text-center">
-                  <h2 className="text-2xl font-bold text-slate-100 mb-1">Resultados</h2>
-              <p className="text-sm text-slate-400">
-                Los resultados se basan en el modelo ML-v4 analizando el perfil del cliente proporcionado.
-              </p>
-            </div>
+                {/* Header con fecha */}
+                <div className="text-center border-b border-slate-800 pb-4">
+                  <h2 className="text-2xl font-bold text-slate-100 mb-1">Resultados de Predicción</h2>
+                  <div className="flex items-center justify-center gap-2 text-sm text-slate-400 mt-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>{predictionResult.fechaPrediccion}</span>
+                  </div>
+                </div>
+
+                {/* Estado de Churn */}
+                <div className="bg-slate-900 rounded-lg p-6 border border-slate-800">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                        Estado del Cliente
+                      </h3>
+                      <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold ${
+                        predictionResult.churn 
+                          ? 'bg-rose-500/10 text-rose-500' 
+                          : 'bg-emerald-500/10 text-emerald-500'
+                      }`}>
+                        {predictionResult.churn ? (
+                          <>
+                            <AlertTriangle className="w-5 h-5" />
+                            <span>Cliente con Riesgo de Abandono</span>
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle className="w-5 h-5" />
+                            <span>Cliente Estable</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
             {/* Gauge de Riesgo */}
             <div className="bg-slate-900 rounded-lg p-6 border border-slate-800">
               <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                Riesgo de Abandono
+                Probabilidad de Abandono
               </h3>
               <div className="flex flex-col items-center">
                 {/* Gauge Visual */}
@@ -822,19 +884,6 @@ const PredictionForm = () => {
                   </div>
                 </div>
 
-                {/* Badge Churn - Dinámico */}
-                {predictionResult.churn ? (
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 border border-rose-500/20 rounded-full mb-3">
-                    <AlertTriangle className="w-4 h-4 text-rose-500" />
-                    <span className="text-xs font-semibold text-rose-500 uppercase">Cliente con Riesgo de Abandono</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-3">
-                    <CheckCircle className="w-4 h-4 text-emerald-500" />
-                    <span className="text-xs font-semibold text-emerald-500 uppercase">Cliente Estable</span>
-                  </div>
-                )}
-
                 <div className="text-sm text-slate-300 mb-4">
                   Puntaje de Prioridad: <span className="font-semibold text-slate-100">{predictionResult.puntajePrioridad}%</span>
                 </div>
@@ -866,7 +915,7 @@ const PredictionForm = () => {
                   predictionResult.factores.map((factor, index) => (
                     <div key={index} className="flex items-center gap-2 text-xs text-slate-300 bg-slate-800 rounded-lg p-3">
                       <div className="w-2 h-2 rounded-full bg-rose-500"></div>
-                      <span>{factor.replace(/_/g, ' ')}</span>
+                      <span>{translateRiskFlag(factor)}</span>
                     </div>
                   ))
                 ) : (
