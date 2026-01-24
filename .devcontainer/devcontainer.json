@@ -1,81 +1,16 @@
 {
-  "name": "ChurnInsight Development",
-  "dockerComposeFile": ["../docker-compose.yaml", "docker-compose.dev.yaml"],
-  "service": "dev",
+  "name": "ChurnInsight Dev Environment",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
   "workspaceFolder": "/workspace",
-  "shutdownAction": "stopCompose",
-  
-  "features": {
-    "ghcr.io/devcontainers/features/java:1": {
-      "version": "17",
-      "installMaven": "true"
-    },
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.11"
-    },
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
-    },
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-  },
-
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        // Java
-        "vscjava.vscode-java-pack",
-        "vscjava.vscode-spring-boot-dashboard",
-        "vmware.vscode-spring-boot",
-        
-        // Python
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "ms-python.black-formatter",
-        "ms-python.isort",
-        
-        // Docker
-        "ms-azuretools.vscode-docker",
-        
-        // Frontend (React/TypeScript)
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        
-        // General
-        "eamodio.gitlens",
-        "redhat.vscode-yaml",
-        "ms-vscode.makefile-tools",
-        "github.copilot"
-      ],
-      
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "python.linting.enabled": true,
-        "python.linting.pylintEnabled": false,
-        "python.linting.flake8Enabled": true,
-        "python.formatting.provider": "black",
-        "editor.formatOnSave": true,
-        "java.home": "/usr/local/sdkman/candidates/java/current",
-        "java.configuration.runtimes": [
-          {
-            "name": "JavaSE-17",
-            "path": "/usr/local/sdkman/candidates/java/current"
-          }
-        ]
-      }
-    }
-  },
-
   "forwardPorts": [3000, 8080, 8000, 3306],
   "portsAttributes": {
     "3000": {
-      "label": "Frontend (Vite)",
-      "onAutoForward": "openBrowser"
+      "label": "Frontend",
+      "onAutoForward": "notify"
     },
     "8080": {
-      "label": "Backend API",
+      "label": "Backend",
       "onAutoForward": "notify"
     },
     "8000": {
@@ -87,8 +22,18 @@
       "onAutoForward": "silent"
     }
   },
-
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-spring-boot-dashboard"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
   "remoteUser": "vscode"
 }
