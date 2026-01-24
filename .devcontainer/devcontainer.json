@@ -37,10 +37,13 @@
         // Docker
         "ms-azuretools.vscode-docker",
         
+        // Frontend (React/TypeScript)
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        
         // General
         "eamodio.gitlens",
-        "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint",
         "redhat.vscode-yaml",
         "ms-vscode.makefile-tools",
         "github.copilot"
@@ -65,8 +68,12 @@
     }
   },
 
-  "forwardPorts": [8080, 8000, 3306],
+  "forwardPorts": [3000, 8080, 8000, 3306],
   "portsAttributes": {
+    "3000": {
+      "label": "Frontend (Vite)",
+      "onAutoForward": "openBrowser"
+    },
     "8080": {
       "label": "Backend API",
       "onAutoForward": "notify"

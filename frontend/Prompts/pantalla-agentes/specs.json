@@ -1,0 +1,31 @@
+{
+  "screen_id": "P5-CRITICAL_CUSTOMERS",
+  "name": "Gestión de Clientes Críticos",
+  "visual_identity": {
+    "background": "Slate-950 (#020617)",
+    "surface": "Slate-900 (#0f172a)",
+    "border": "Slate-800 (#1e293b)",
+    "accent_critical": "Rose-500 (#f43f5e)"
+  },
+  "layout": "Sidebar lateral + Cabecera con filtros de urgencia + Grid de Tarjetas",
+  "components": [
+    {
+      "id": "urgency_filter",
+      "type": "Tabs",
+      "options": ["Todos Críticos (>75%)", "Pérdida de Ingresos Alta", "Sin Contacto Reciente"]
+    },
+    {
+      "id": "critical_grid",
+      "type": "Grid",
+      "columns": { "sm": 1, "md": 2, "lg": 3 },
+      "card_elements": [
+        "Avatar_Cliente",
+        "Nombre",
+        "Puntaje_Riesgo_Badge",
+        "Valor_Contrato_Mensual",
+        "Dias_Inactivo",
+        "Botones_Accion_Rapida"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "screen_id": "P3-PREDICTION_FORM",
+  "name": "Generar Predicción de Abandono",
+  "visual_identity": {
+    "background": "Slate-950 (#020617)",
+    "surface": "Slate-900 (#0f172a)",
+    "border": "Slate-800 (#1e293b)",
+    "accents": {
+      "success": "Emerald-500 (#10b981)",
+      "danger": "Rose-500 (#f43f5e)",
+      "warning": "Amber-500 (#f59e0b)"
+    }
+  },
+  "layout": "Sidebar lateral + Contenedor central de formulario (60%) + Panel lateral de resultados (40%)",
+  "form_structure": {
+    "sections": [
+      {
+        "title": "Demografía",
+        "fields": ["age", "gender", "location", "occupation", "education_level"]
+      },
+      {
+        "title": "Uso de Servicios",
+        "fields": ["subscription_type", "tenure_months", "usage_frequency", "tech_support_calls"]
+      },
+      {
+        "title": "Historial Financiero",
+        "fields": ["monthly_charges", "total_charges", "balance", "promotion_type", "days_since_last_purchase"]
+      }
+    ]
+  },
+  "result_panel": {
+    "type": "Fixed Side Panel",
+    "components": ["Risk Gauge", "Impact Factors (SHAP)", "Action Buttons"]
+  }
+}

@@ -1,16 +1,12 @@
 #!/bin/bash
 
-echo "🚀 Configurando entorno de desarrollo ChurnInsight..."
+echo "Configurando entorno de desarrollo ChurnInsight..."
 
 # Instalar dependencias Python para ml-service
 echo "📦 Instalando dependencias de Python (ml-service)..."
-pip install --user -r ml-service/requirements.txt
+pip install --user -r ml-service/requirements.txt || echo "⚠️  Error instalando dependencias Python (se pueden instalar después)"
 
-echo "✅ Configuración completada!"
-echo ""
-echo "📝 Servicios disponibles:"
-echo "  - Backend (Java Spring Boot): http://localhost:8080"
-echo "  - ML Service (FastAPI): http://localhost:8000"
-echo "  - MySQL: localhost:3306"
-echo ""
-echo "🔧 Para iniciar los servicios, ejecuta: docker-compose up -d"
+# Instalar dependencias del frontend
+echo "📦 Instalando dependencias de Node.js (frontend)..."
+cd /workspace/frontend && npm install || echo "⚠️  Error instalando dependencias npm (se pueden instalar después)"
+cd /workspace
