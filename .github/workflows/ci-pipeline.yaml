@@ -2,19 +2,46 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "infra/163-optimizar-pipeline-ci" ]
+    branches: [ "main" ]
     paths: &shared_paths
+     # Backend
      - "backend/**"
-     - "backend/pom.xml"
-     - "backend/Dockerfile"
+     - "!backend/target/**"
+     
+     # ML
      - "ml-service/**"
+     
+     # Frontend
+     - "frontend/src/**"
+     - "frontend/public/**"
+     - "frontend/package.json"
+     - "frontend/package-lock.json"
+     - "frontend/tsconfig.json"
+     - "frontend/vite.config.ts"
+     - "frontend/tailwind.config.js"
+     - "frontend/postcss.config.js"
+     - "frontend/index.html"
+     - "frontend/Dockerfile"
+     - "frontend/nginx.conf"
+     - "!frontend/node_modules/**"
+     - "!frontend/dist/**"
+     - "!frontend/mock_ups/**"
+     - "!frontend/Prompts/**"
+     
+     # Infraestructura
      - "docker-compose.yaml"
      - ".github/workflows/ci-pipeline.yaml"
-
+     
+     # Otras Exclusiones
      - "!docs/**"
+     - "!agentes/**"
+     - "!contracts/**"
+     - "!data-science/**"
+     - "!infra/**"
      - "!LICENSE"
      - "!**.md"
      - "!**.png"
+     - "!**.jpg"
      - "!**.drawio"
      - "!data-science/notebooks/**"
      - "!data-science/data/**.csv"
@@ -35,7 +62,7 @@ jobs:
 
     strategy:
       matrix:
-        service: [backend, ml-service]
+        service: [backend, ml-service, frontend]
 
     steps:
     
