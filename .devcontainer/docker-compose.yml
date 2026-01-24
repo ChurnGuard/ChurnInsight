@@ -1,0 +1,49 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ML_SERVICE_URL=http://localhost:8000
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/churninsight
+      - SPRING_DATASOURCE_USERNAME=churnuser
+      - SPRING_DATASOURCE_PASSWORD=churnpass
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=churninsight
+      - MYSQL_USER=churnuser
+      - MYSQL_PASSWORD=churnpass
+      - PIP_BREAK_SYSTEM_PACKAGES=1
+    networks:
+      - churninsight-network
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=churninsight
+      - MYSQL_USER=churnuser
+      - MYSQL_PASSWORD=churnpass
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - churninsight-network
+
+networks:
+  churninsight-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
