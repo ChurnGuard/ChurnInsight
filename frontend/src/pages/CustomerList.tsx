@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Search, ExternalLink, AlertCircle } from 'lucide-react'
+import { Search, AlertCircle } from 'lucide-react'
 import { customerService, PredictionInfo } from '../services/customerService'
 
 const CustomerList = () => {
@@ -52,11 +52,6 @@ const CustomerList = () => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
-  }
-
-  const getCustomerName = (customerId: string) => {
-    // Por ahora retornamos "N/A" hasta que backend envíe el nombre
-    return 'N/A'
   }
 
   const filteredPredictions = predictions.filter(prediction => {

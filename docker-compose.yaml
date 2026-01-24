@@ -1,8 +1,21 @@
 services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://backend:8080
+    networks:
+      - churninsight-network
+
   ml-service:
     build: ./ml-service
     ports:
       - "8000:8000"
+    networks:
+      - churninsight-network
     
   backend:
     build: ./backend
@@ -23,6 +36,8 @@ services:
         condition: service_healthy
       ml-service:
         condition: service_started
+    networks:
+      - churninsight-network
 
   db:
     image: mysql:8.0
@@ -43,6 +58,12 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    networks:
+      - churninsight-network
+
+networks:
+  churninsight-network:
+    driver: bridge
 
 volumes:
   mysql_data:

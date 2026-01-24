@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Edit2, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle, Plus, Calendar } from 'lucide-react'
+import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle, Plus, Calendar } from 'lucide-react'
 import { predictionService, PredictionResponse } from '../services/predictionService'
 
 interface PredictionResult {
@@ -55,8 +55,8 @@ const PredictionForm = () => {
     occupation: '',
     
     // Membresía
-    loyalty_program: true,
-    promo_flag: true,
+    loyalty_program: 'true',
+    promo_flag: 'true',
     membership_years: '',
     
     // Transacción
@@ -182,8 +182,8 @@ const PredictionForm = () => {
       income_bracket: '',
       education_level: '',
       occupation: '',
-      loyalty_program: true,
-      promo_flag: true,
+      loyalty_program: 'true',
+      promo_flag: 'true',
       membership_years: '',
       product_category: '',
       quantity: '',
@@ -431,8 +431,8 @@ const PredictionForm = () => {
                   <input
                     type="checkbox"
                     name="loyalty_program"
-                    checked={formData.loyalty_program}
-                    onChange={(e) => setFormData({ ...formData, loyalty_program: e.target.checked })}
+                    checked={formData.loyalty_program === 'true'}
+                    onChange={(e) => setFormData({ ...formData, loyalty_program: e.target.checked ? 'true' : 'false' })}
                     className="w-5 h-5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
                   />
                   <label className="text-sm font-medium text-white">Programa de Lealtad</label>
@@ -442,8 +442,8 @@ const PredictionForm = () => {
                   <input
                     type="checkbox"
                     name="promo_flag"
-                    checked={formData.promo_flag}
-                    onChange={(e) => setFormData({ ...formData, promo_flag: e.target.checked })}
+                    checked={formData.promo_flag === 'true'}
+                    onChange={(e) => setFormData({ ...formData, promo_flag: e.target.checked ? 'true' : 'false' })}
                     className="w-5 h-5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
                   />
                   <label className="text-sm font-medium text-white">Recibe Promociones</label>

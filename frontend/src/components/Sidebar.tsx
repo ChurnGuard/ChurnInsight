@@ -1,7 +1,7 @@
 import { LayoutDashboard, FileText, Activity } from 'lucide-react'
 
 interface SidebarProps {
-  currentPage?: 'tablero' | 'predicciones' | 'agentes'
+  currentPage?: 'tablero' | 'predicciones' | 'agentes' | 'clientes'
 }
 
 const Sidebar = ({ currentPage = 'tablero' }: SidebarProps) => {
