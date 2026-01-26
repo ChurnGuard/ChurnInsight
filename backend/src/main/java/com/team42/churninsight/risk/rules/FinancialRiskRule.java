@@ -16,6 +16,13 @@ public class FinancialRiskRule implements RiskRule{
 
     @Override
     public boolean evaluate(PredictionRequest request) {
+        if (request.avgPurchaseValue() == null
+                || request.avgDiscountUsed() == null
+                || request.promotionEffectiveness() == null) {
+            return false;
+        }
+
+
         return request.avgPurchaseValue().compareTo(MAX_AVG_PURCHASE_VALUE) <= 0 &&
                 request.avgDiscountUsed().compareTo(MIN_AVG_DISCOUNT_USED) >= 0 &&
                 request.promotionEffectiveness().compareTo(MAX_PROMO_EFFECTIVENESS) < 0;

@@ -55,8 +55,7 @@ public class EconomicService {
                 .add(nAvg.multiply(W_AVG_PURCHASE))
                 .add(nTx.multiply(W_TOTAL_TRANSACTIONS)); // ∈ [0..1]
 
-        return weighted01.multiply(new BigDecimal("100"))
-                .setScale(SCALE, RoundingMode.HALF_UP);   // ∈ [0..100]
+        return weighted01.setScale(SCALE, RoundingMode.HALF_UP);   // ∈ [0..100]
     }
 
     /**
