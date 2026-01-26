@@ -27,20 +27,19 @@ public class ProfileService {
 
         BigDecimal discountUsage = request.avgDiscountUsed();
         BigDecimal totalSales =  request.totalSales();
-
         double onlinePercentage = CalculateOnlinePercentage(request);
 
         //Revisar valor a comparar para discountUsage
-        if( discountUsage.compareTo(BigDecimal.valueOf(5) ) > 0
-                && onlinePercentage < 60 ) {
+        if( discountUsage.compareTo(BigDecimal.valueOf(0.30) ) >= 0
+                && onlinePercentage < 50 ) {
 
             return ProfileType.IN_STORE_DEAL_HUNTER;
         }
 
-        if ( totalSales.compareTo(BigDecimal.valueOf(10000) ) > 0
-                && discountUsage.compareTo(BigDecimal.valueOf(0.30)) >=0
-                && discountUsage.compareTo(BigDecimal.valueOf(0.50)) <=0
-                && onlinePercentage > 65.0 ) {
+        if (    totalSales != null
+                && totalSales.compareTo(BigDecimal.valueOf(8000) ) >= 0
+                && discountUsage.compareTo(BigDecimal.valueOf(0.25)) >=0
+                && onlinePercentage > 60.0 ) {
 
             return ProfileType.HIGH_VALUE_DISCOUNT_ONLINE;
         }
