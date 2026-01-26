@@ -15,6 +15,11 @@ public class InactivityRiskRule implements RiskRule{
 
     @Override
     public boolean evaluate(PredictionRequest request) {
+        if( request.daysSinceLastPurchase() == null ||
+                request.purchaseFrequency() == null){
+            return false;
+        }
+
         return request.daysSinceLastPurchase() >= P75_DAYS && request.purchaseFrequency().compareTo(MID_FREQUENCY) >= 0;
     }
 
