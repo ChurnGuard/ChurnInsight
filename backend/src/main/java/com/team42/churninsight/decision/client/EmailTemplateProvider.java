@@ -60,7 +60,7 @@ public class EmailTemplateProvider {
                         ¡Sigue sumando!
                         """
         ));
-        templates.put("LOW_RISK_HIGH_VALUE_NO_FLAG", new EmailContent(
+        templates.put("ESSENTIAL_MODERATE_BUYER_NO_RISK", new EmailContent(
                 "Descubre lo nuevo: Calidad al mejor precio",
                 """
                         Hola, queremos que sigas disfrutando de lo mejor sin gastar de más. 
