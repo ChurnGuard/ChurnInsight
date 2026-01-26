@@ -68,6 +68,15 @@ public class EmailTemplateProvider {
                         Además, ¡invita a un amigo y ambos ganan crédito en su cuenta!
                         """
         ));
+        templates.put("LOW_RISK_HIGH_VALUE_NO_FLAG", new EmailContent(
+                "¡Eres parte de nuestro programa de puntos exclusivos!",
+                """
+                        Hola, queremos premiar tu fidelidad de una forma diferente. 
+                        Ahora cada interacción cuenta: 
+                        acumula puntos por cada compra y canjéalos por experiencias, lanzamientos anticipados y beneficios VIP. 
+                        ¡Sigue sumando!
+                        """
+        ));
         templates.put("LOW_RISK_HIGH_VALUE_ANY_FLAG", new EmailContent(
                 "¡Eres parte de nuestro programa de puntos exclusivos!",
                 """
