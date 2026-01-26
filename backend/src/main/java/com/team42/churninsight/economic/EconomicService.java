@@ -36,6 +36,10 @@ public class EconomicService {
 
     private static final int SCALE = 4;
     private static final BigDecimal FLOOR = new BigDecimal("0.05");
+    private static final BigDecimal DEFAULT_ECONOMIC_SCORE = new BigDecimal("0.5");
+    private static final BigDecimal DEFAULT_CHURN = new BigDecimal("0.3");
+
+
     /**
      * economic_value_score =
      * 100 * (0.5*norm(total_sales) + 0.3*norm(avg_purchase_value) + 0.2*norm(total_transactions))
@@ -65,7 +69,11 @@ public class EconomicService {
      * - score < P40 -> LOW
      */
     public ValueCustomer categorize(BigDecimal economicValueScore) {
-        BigDecimal score = safe(economicValueScore);
+
+        BigDecimal score = economicValueScore != null
+                ? economicValueScore
+                :DEFAULT_ECONOMIC_SCORE;
+
         if (score.compareTo(P75) >= 0) return ValueCustomer.HIGH_VALUE_CUSTOMER;
         if (score.compareTo(P40) >= 0) return ValueCustomer.MEDIUM_VALUE_CUSTOMER;
         return ValueCustomer.LOW_VALUE_CUSTOMER;
@@ -82,9 +90,18 @@ public class EconomicService {
     */
 
     public BigDecimal priorityScore(BigDecimal churnProbability, BigDecimal economicValueScore) {
-        BigDecimal p = clamp01(safe(churnProbability));
-        BigDecimal s = safe(economicValueScore);
-        return p.multiply(s).setScale(SCALE, RoundingMode.HALF_UP);
+
+        BigDecimal p = churnProbability != null
+                ? clamp01(churnProbability)
+                : DEFAULT_CHURN;
+
+        BigDecimal s = economicValueScore != null
+                ? economicValueScore
+                : DEFAULT_ECONOMIC_SCORE;
+
+        return p.multiply(s)
+                .max(new BigDecimal("0.01"))
+                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     /**
@@ -121,7 +138,7 @@ public class EconomicService {
         return v == null ? domainMin : v;
     }
 
-    private int safe(Integer v, BigDecimal domainMin) {
-        return v == null ? domainMin : v;
+    private BigDecimal safe(Integer v, BigDecimal domainMin) {
+        return v == null ? domainMin : BigDecimal.valueOf(v);
     }
 }
