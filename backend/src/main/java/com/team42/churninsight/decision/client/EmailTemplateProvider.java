@@ -60,6 +60,32 @@ public class EmailTemplateProvider {
                         ¡Sigue sumando!
                         """
         ));
+        templates.put("ESSENTIAL_MODERATE_BUYER_NO_RISK", new EmailContent(
+                "Descubre lo nuevo: Calidad al mejor precio",
+                """
+                        Hola, queremos que sigas disfrutando de lo mejor sin gastar de más. 
+                        Mira nuestra selección de productos esenciales con precios increíbles. 
+                        Además, ¡invita a un amigo y ambos ganan crédito en su cuenta!
+                        """
+        ));
+        templates.put("LOW_RISK_HIGH_VALUE_NO_FLAG", new EmailContent(
+                "¡Eres parte de nuestro programa de puntos exclusivos!",
+                """
+                        Hola, queremos premiar tu fidelidad de una forma diferente. 
+                        Ahora cada interacción cuenta: 
+                        acumula puntos por cada compra y canjéalos por experiencias, lanzamientos anticipados y beneficios VIP. 
+                        ¡Sigue sumando!
+                        """
+        ));
+        templates.put("LOW_RISK_HIGH_VALUE_ANY_FLAG", new EmailContent(
+                "¡Eres parte de nuestro programa de puntos exclusivos!",
+                """
+                        Hola, queremos premiar tu fidelidad de una forma diferente. 
+                        Ahora cada interacción cuenta: 
+                        acumula puntos por cada compra y canjéalos por experiencias, lanzamientos anticipados y beneficios VIP. 
+                        ¡Sigue sumando!
+                        """
+        ));
     }
 
     public EmailContent getTemplate(String action) {
