@@ -10,17 +10,21 @@ import java.math.BigDecimal;
 public class InactivityRiskRule implements RiskRule{
 
 
-    private static final BigDecimal MID_FREQUENCY = new BigDecimal(18);
-    private static final int P75_DAYS = 492;
+    //private static final BigDecimal MID_FREQUENCY = new BigDecimal(18);
+    //private static final int P75_DAYS = 492;
+
+    private static final BigDecimal MIN_HISTORICAL_FREQUENCY = new BigDecimal("2.0");
+    private static final int INACTIVITY_DAYS_THRESHOLD = 90;
 
     @Override
     public boolean evaluate(PredictionRequest request) {
         if( request.daysSinceLastPurchase() == null ||
-                request.purchaseFrequency() == null){
+        request.purchaseFrequency() == null){
             return false;
         }
 
-        return request.daysSinceLastPurchase() >= P75_DAYS && request.purchaseFrequency().compareTo(MID_FREQUENCY) >= 0;
+        return request.daysSinceLastPurchase() >= INACTIVITY_DAYS_THRESHOLD
+                && request.purchaseFrequency().compareTo(MIN_HISTORICAL_FREQUENCY) >= 0;
     }
 
     @Override
