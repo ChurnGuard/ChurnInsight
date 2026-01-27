@@ -42,7 +42,7 @@ const CriticalCustomerCard = ({
         </div>
         <div className="text-right">
           <div className="text-3xl font-bold text-rose-500 mb-1">
-            {riesgo}%
+            {riesgo.toFixed(2)}%
           </div>
           <p className="text-xs text-slate-400 uppercase">
             Riesgo de<br />Abandono
@@ -66,7 +66,7 @@ const CriticalCustomerCard = ({
           Puntaje de Prioridad
         </p>
         <div className="text-2xl font-bold text-rose-500">
-          {puntajePrioridad}%
+          {puntajePrioridad.toFixed(2)}%
         </div>
       </div>
 

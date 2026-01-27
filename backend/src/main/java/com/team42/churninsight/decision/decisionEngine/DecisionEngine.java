@@ -13,7 +13,7 @@ public final class DecisionEngine {
                 .filter(r -> r.applies(request))
                 .map(DecisionRule::getAction)
                 .findFirst()
-                .orElse("ERROR_NO_RECOMMENDED_ACTION");
+                .orElse("Llamada urgente + beneficio exclusivo + gestor de cuenta dedicado");
     }
 
     public String getRecommendationCode(DecisionRequest request) {
@@ -26,6 +26,8 @@ public final class DecisionEngine {
 
     private static List<DecisionRule> decisionRuleList() {
         return  List.of(
+                new LowRiskHighValue.AnyFlag(),
+                new LowRiskHighValue.NoFLag(),
                 new CaseEssentialModerateBuyer.PromoAbuse(),
                 new CaseEssentialModerateBuyer.NoRisk(),
                 new CaseHighValueDiscountOnline.PromoAbuse(),
@@ -40,9 +42,7 @@ public final class DecisionEngine {
                 new HighRiskLowValue.PromoAbuse(),
                 new HighRiskMediumValue.InactivityRisk(),
                 new HighRiskMediumValue.FinancialRisk(),
-                new HighRiskMediumValue.PromoAbuse(),
-                new LowRiskHighValue.AnyFlag(),
-                new LowRiskHighValue.NoFLag()
+                new HighRiskMediumValue.PromoAbuse()
         );
     }
 }

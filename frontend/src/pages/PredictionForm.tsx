@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { User, Briefcase, CreditCard, Sparkles, TrendingUp, Lightbulb, Share2, ChevronLeft, ChevronRight, AlertCircle, AlertTriangle, CheckCircle, Plus, Calendar } from 'lucide-react'
 import { predictionService, PredictionResponse } from '../services/predictionService'
 
@@ -50,55 +50,82 @@ const translateEconomicValue = (value: string): string => {
   return ECONOMIC_VALUE_TRANSLATIONS[value] || value
 }
 
+// Función para obtener los datos por defecto del formulario
+const getDefaultFormData = () => ({
+  // Identificación
+  customer_id: '',
+  transaction_id: '',
+  transaction_date: '',
+  
+  // Demografía
+  age: '',
+  gender: '',
+  marital_status: '',
+  number_of_children: '',
+  income_bracket: '',
+  education_level: '',
+  occupation: '',
+  
+  // Membresía
+  loyalty_program: 'true',
+  promo_flag: 'true',
+  membership_years: '',
+  
+  // Transacción
+  product_category: '',
+  quantity: '',
+  unit_price: '',
+  promotion_type: '',
+  
+  // Historial de Compras
+  last_purchase_date: '',
+  days_since_last_purchase: '',
+  total_purchases: '',
+  total_transactions: '',
+  total_items_purchased: '',
+  total_sales: '',
+  avg_purchase_value: '',
+  purchase_frequency: '',
+  avg_discount_used: '',
+  promotion_effectiveness: '',
+  
+  // Canal de Compra
+  online_purchases: '',
+  in_store_purchases: '',
+  online_ratio: ''
+})
+
 const PredictionForm = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    // Identificación
-    customer_id: '',
-    transaction_id: '',
-    transaction_date: '',
-    
-    // Demografía
-    age: '',
-    gender: '',
-    marital_status: '',
-    number_of_children: '',
-    income_bracket: '',
-    education_level: '',
-    occupation: '',
-    
-    // Membresía
-    loyalty_program: 'true',
-    promo_flag: 'true',
-    membership_years: '',
-    
-    // Transacción
-    product_category: '',
-    quantity: '',
-    unit_price: '',
-    promotion_type: '',
-    
-    // Historial de Compras
-    last_purchase_date: '',
-    days_since_last_purchase: '',
-    total_purchases: '',
-    total_transactions: '',
-    total_items_purchased: '',
-    total_sales: '',
-    avg_purchase_value: '',
-    purchase_frequency: '',
-    avg_discount_used: '',
-    promotion_effectiveness: '',
-    
-    // Canal de Compra
-    online_purchases: '',
-    in_store_purchases: '',
-    online_ratio: ''
+  
+  // Cargar datos del localStorage al iniciar
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem('churninsight_form_data')
+    if (savedData) {
+      try {
+        return JSON.parse(savedData)
+      } catch {
+        return getDefaultFormData()
+      }
+    }
+    return getDefaultFormData()
   })
 
   const [predictionResult, setPredictionResult] = useState<PredictionResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Guardar datos en localStorage cada vez que cambien
+  useEffect(() => {
+    localStorage.setItem('churninsight_form_data', JSON.stringify(formData))
+  }, [formData])
+
+  // Función para convertir fecha de yyyy-MM-dd a dd/MM/yyyy
+  const formatDateForBackend = (dateStr: string): string => {
+    if (!dateStr) return dateStr
+    const [year, month, day] = dateStr.split('-')
+    return `${day}/${month}/${year}`
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -110,7 +137,7 @@ const PredictionForm = () => {
       const requestData = {
         customer_id: formData.customer_id,
         transaction_id: formData.transaction_id,
-        transaction_date: formData.transaction_date,
+        transaction_date: formatDateForBackend(formData.transaction_date),
         age: parseInt(formData.age),
         gender: formData.gender,
         marital_status: formData.marital_status,
@@ -121,7 +148,7 @@ const PredictionForm = () => {
         loyalty_program: formData.loyalty_program === 'true',
         promo_flag: formData.promo_flag === 'true',
         membership_years: parseInt(formData.membership_years) || 0,
-        last_purchase_date: formData.last_purchase_date,
+        last_purchase_date: formatDateForBackend(formData.last_purchase_date),
         product_category: formData.product_category,
         quantity: parseInt(formData.quantity) || 1,
         unit_price: parseFloat(formData.unit_price) || 0,
@@ -950,7 +977,11 @@ const PredictionForm = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-emerald-400 mb-1">Acción Recomendada</h3>
-                  <p className="text-sm text-emerald-300/90">{predictionResult.accionRecomendada}</p>
+                  <p className="text-sm text-emerald-300/90">
+                    {predictionResult.accionRecomendada === 'ERROR_NO_RECOMMENDED_ACTION' 
+                      ? 'Mantenimiento suave + newsletter mensual + descuentos estacionales'
+                      : predictionResult.accionRecomendada}
+                  </p>
                 </div>
               </div>
             </div>
