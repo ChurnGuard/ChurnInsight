@@ -7,6 +7,7 @@ interface PredictionResult {
   puntajePrioridad: number
   clienteAltoValor: boolean
   perfil: string
+  economicValue: string
   factores: string[]
   accionRecomendada: string
   churn: boolean
@@ -27,6 +28,13 @@ const RISK_FLAG_TRANSLATIONS: Record<string, string> = {
   'PROMO_ABUSE': 'Abuso de Promociones'
 }
 
+// Traducciones de valores económicos
+const ECONOMIC_VALUE_TRANSLATIONS: Record<string, string> = {
+  'HIGH_VALUE_CUSTOMER': 'Cliente de Alto Valor',
+  'MEDIUM_VALUE_CUSTOMER': 'Cliente de Valor Medio',
+  'LOW_VALUE_CUSTOMER': 'Cliente de Bajo Valor'
+}
+
 // Función helper para traducir perfil
 const translateProfile = (profile: string): string => {
   return PROFILE_TRANSLATIONS[profile] || profile
@@ -35,6 +43,11 @@ const translateProfile = (profile: string): string => {
 // Función helper para traducir factor de riesgo
 const translateRiskFlag = (flag: string): string => {
   return RISK_FLAG_TRANSLATIONS[flag] || flag
+}
+
+// Función helper para traducir valor económico
+const translateEconomicValue = (value: string): string => {
+  return ECONOMIC_VALUE_TRANSLATIONS[value] || value
 }
 
 const PredictionForm = () => {
@@ -135,6 +148,7 @@ const PredictionForm = () => {
         puntajePrioridad: Math.round(response.priority_score * 100),
         clienteAltoValor: response.economic_value === 'HIGH_VALUE_CUSTOMER',
         perfil: translateProfile(response.customer_profile),
+        economicValue: translateEconomicValue(response.economic_value),
         factores: response.risk_flags,
         accionRecomendada: response.recommended_action,
         churn: response.churn,
@@ -899,6 +913,10 @@ const PredictionForm = () => {
                   <div className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg">
                     <User className="w-4 h-4 text-slate-400" />
                     <span className="text-xs font-medium text-slate-300">Perfil: {predictionResult.perfil}</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg">
+                    <Briefcase className="w-4 h-4 text-slate-400" />
+                    <span className="text-xs font-medium text-slate-300">Valor Económico: {predictionResult.economicValue}</span>
                   </div>
                 </div>
               </div>
