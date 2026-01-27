@@ -13,7 +13,7 @@ public final class DecisionEngine {
                 .filter(r -> r.applies(request))
                 .map(DecisionRule::getAction)
                 .findFirst()
-                .orElse("ERROR_NO_RECOMMENDED_ACTION");
+                .orElse("Mantenimiento suave + newsletter mensual + descuentos estacionales");
     }
 
     public String getRecommendationCode(DecisionRequest request) {

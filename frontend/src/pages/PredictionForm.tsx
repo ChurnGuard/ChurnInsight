@@ -100,6 +100,13 @@ const PredictionForm = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Función para convertir fecha de yyyy-MM-dd a dd/MM/yyyy
+  const formatDateForBackend = (dateStr: string): string => {
+    if (!dateStr) return dateStr
+    const [year, month, day] = dateStr.split('-')
+    return `${day}/${month}/${year}`
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -110,7 +117,7 @@ const PredictionForm = () => {
       const requestData = {
         customer_id: formData.customer_id,
         transaction_id: formData.transaction_id,
-        transaction_date: formData.transaction_date,
+        transaction_date: formatDateForBackend(formData.transaction_date),
         age: parseInt(formData.age),
         gender: formData.gender,
         marital_status: formData.marital_status,
@@ -121,7 +128,7 @@ const PredictionForm = () => {
         loyalty_program: formData.loyalty_program === 'true',
         promo_flag: formData.promo_flag === 'true',
         membership_years: parseInt(formData.membership_years) || 0,
-        last_purchase_date: formData.last_purchase_date,
+        last_purchase_date: formatDateForBackend(formData.last_purchase_date),
         product_category: formData.product_category,
         quantity: parseInt(formData.quantity) || 1,
         unit_price: parseFloat(formData.unit_price) || 0,
@@ -950,7 +957,11 @@ const PredictionForm = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-emerald-400 mb-1">Acción Recomendada</h3>
-                  <p className="text-sm text-emerald-300/90">{predictionResult.accionRecomendada}</p>
+                  <p className="text-sm text-emerald-300/90">
+                    {predictionResult.accionRecomendada === 'ERROR_NO_RECOMMENDED_ACTION' 
+                      ? 'Mantenimiento suave + newsletter mensual + descuentos estacionales'
+                      : predictionResult.accionRecomendada}
+                  </p>
                 </div>
               </div>
             </div>
