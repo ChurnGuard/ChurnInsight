@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from schemas.prediction import PredictionRequest
+from app.schemas.prediction import PredictionRequest
 from contextlib import asynccontextmanager
 import joblib
 import pandas as pd
