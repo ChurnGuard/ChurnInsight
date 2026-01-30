@@ -145,7 +145,7 @@ El backend implementa una **arquitectura modular limpia** con separación de cap
 
 ```
 backend/
-├── feature/            # Funcionalidad específica 
+├── feature/            # Funcionalidad específica
 │   ├──api/             # Capa de presentación (Controllers, DTOs)
 │   ├── service/        # Capa de lógica de negocio
 │   ├── repository/     # Capa de persistencia (JPA)
@@ -793,14 +793,13 @@ Métrica desarrollada: `EVS = (sales_percentile * weight_sales) + (value_percent
 
 **2️⃣ Entrenamiento de Modelos**:
 
-Se evaluaron 5 algoritmos:
-| Modelo | Accuracy | Precision | Recall | F1-Score | AUC-ROC |
-|--------|----------|-----------|--------|----------|---------|
-| Random Forest | **85.2%** | **82.1%** | **78.3%** | **80.1%** | **0.89** |
-| Gradient Boosting | 83.5% | 80.2% | 76.8% | 78.4% | 0.87 |
-| Logistic Regression | 79.3% | 75.6% | 72.1% | 73.8% | 0.82 |
-| SVM | 77.8% | 74.2% | 70.5% | 72.3% | 0.80 |
-| Decision Tree | 76.4% | 72.8% | 69.2% | 70.9% | 0.78 |
+Se evaluaron 4 algoritmos:
+| Modelo | Accuracy | Precision | Recall | F1-Score |
+|--------|----------|-----------|--------|----------|
+| **Random Forest** | **98.3%** | **100.0%** | **94.0%** | **96.9%** |
+| KNN | 96.7% | 92.6% | 96.1% | 94.3% |
+| Logistic Regression | 85.3% | 81.1% | 63.2% | 71.0% |
+| SVC | 69.2% | 27.5% | 4.9% | 8.3% |
 
 **Modelo ganador**: ✅ **Random Forest** (`rf_v1_baseline.joblib`)
 
