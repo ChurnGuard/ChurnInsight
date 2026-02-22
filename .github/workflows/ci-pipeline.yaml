@@ -56,4 +56,4 @@ jobs:
     uses: phylip28/gha-workflows/.github/workflows/docker-ghcr.yaml@main
     with:
       services: '["backend", "ml-service", "frontend"]'
-    secrerets: inherit
+    secrets: inherit
