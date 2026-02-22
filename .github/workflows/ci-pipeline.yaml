@@ -54,8 +54,8 @@ on:
 jobs:
   call-docker-build:
     permissions:
-    contents: read
-    packages: write
+      contents: read
+      packages: write
 
     uses: phylip28/gha-workflows/.github/workflows/docker-ghcr.yaml@main
     with:
