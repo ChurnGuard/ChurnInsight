@@ -57,7 +57,7 @@ jobs:
       contents: read
       packages: write
 
-    uses: phylip28/gha-workflows/.github/workflows/docker-ghcr.yaml@main
+    uses: phylip28/gha-workflows/.github/workflows/docker-ghcr.yaml@trunk
     with:
       services: '["backend", "ml-service", "frontend"]'
     secrets: inherit
