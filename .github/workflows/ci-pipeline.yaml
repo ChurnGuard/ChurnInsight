@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches: ["main"]
-    paths: &shared_paths 
+    paths: &shared_paths
       # Backend
       - "backend/**"
       - "!backend/target/**"
@@ -52,11 +52,11 @@ on:
     paths: *shared_paths
 
 jobs:
-  permissions:
+  call-docker-build:
+    permissions:
     contents: read
     packages: write
 
-  call-docker-build:
     uses: phylip28/gha-workflows/.github/workflows/docker-ghcr.yaml@main
     with:
       services: '["backend", "ml-service", "frontend"]'
